@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>GUI.GUIModelUnused</title><link rel="stylesheet" href="Agda.css"></head><body><pre>
+<a id="2" class="Keyword">module</a> <a id="9" href="GUI.GUIModelUnused.html" class="Module">GUI.GUIModelUnused</a> <a id="28" class="Keyword">where</a>
+
+<a id="35" class="Comment">-- open import GUIgeneric.Prelude renaming (inj₁ to secondButton; inj₂ to firstButton)</a>
+
+<a id="123" class="Comment">-- open import GUIgeneric.PreludeGUI renaming (WxColor to Color) hiding (IIOnterfaceˢ)</a>
+
+<a id="211" class="Comment">-- open import GUIgeneric.GUIDefinitions renaming (add to add&#39;; add&#39; to add) --; ComponentEls to Frame)</a>
+<a id="315" class="Comment">-- open import GUIgeneric.GUI</a>
+<a id="345" class="Comment">-- open import GUIgeneric.GUIExampleLib</a>
+<a id="385" class="Comment">-- open import GUIgeneric.GUIExample -- hiding (HandlerGUIObject)</a>
+
+<a id="452" class="Keyword">open</a> <a id="457" class="Keyword">import</a> <a id="464" href="StateSizedIO.GUI.BaseStateDependent.html" class="Module">StateSizedIO.GUI.BaseStateDependent</a>
+<a id="500" class="Keyword">open</a> <a id="505" class="Keyword">import</a> <a id="512" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html" class="Module">StateSizedIO.writingOOsUsingIOVers4ReaderMethods</a> <a id="561" class="Keyword">hiding</a> <a id="568" class="Symbol">(</a><a id="569" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#20924" class="Function">nˢ</a><a id="571" class="Symbol">)</a> <a id="573" class="Keyword">renaming</a><a id="581" class="Symbol">(</a><a id="582" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execˢⁱ</a> <a id="589" class="Symbol">to</a> <a id="592" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execᵢ</a> <a id="598" class="Symbol">;</a> <a id="600" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnˢⁱ</a> <a id="609" class="Symbol">to</a> <a id="612" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnᵢ</a><a id="619" class="Symbol">)</a>
+<a id="621" class="Keyword">open</a> <a id="626" class="Keyword">import</a> <a id="633" href="GUI.GUIDefinitions.html" class="Module">GUI.GUIDefinitions</a>
+<a id="652" class="Keyword">open</a> <a id="657" class="Keyword">import</a> <a id="664" href="GUI.GUIDefinitionsBase.html" class="Module">GUI.GUIDefinitionsBase</a>
+<a id="687" class="Keyword">open</a> <a id="692" class="Keyword">import</a> <a id="699" href="SizedIO.Base.html" class="Module">SizedIO.Base</a>  <a id="713" class="Keyword">renaming</a> <a id="722" class="Symbol">(</a><a id="723" href="SizedIO.Base.html#540" class="Record">IO</a> <a id="726" class="Symbol">to</a> <a id="729" href="SizedIO.Base.html#540" class="Record">IO∞</a><a id="732" class="Symbol">;</a> <a id="734" href="SizedIO.Base.html#681" class="Datatype">IO&#39;</a> <a id="738" class="Symbol">to</a> <a id="741" href="SizedIO.Base.html#681" class="Datatype">IO</a><a id="743" class="Symbol">)</a>
+<a id="745" class="Keyword">open</a> <a id="750" class="Keyword">import</a> <a id="757" href="SizedIO.Console.html" class="Module">SizedIO.Console</a>
+
+<a id="774" class="Comment">-- open IOInterfaceˢ public</a>
+
+<a id="803" class="Keyword">open</a> <a id="808" class="Keyword">import</a> <a id="815" href="Data.Product.html" class="Module">Data.Product</a>
+<a id="828" class="Keyword">open</a> <a id="833" class="Keyword">import</a> <a id="840" href="Data.Nat.html" class="Module">Data.Nat</a>
+<a id="849" class="Keyword">open</a> <a id="854" class="Keyword">import</a> <a id="861" href="Data.Fin.html" class="Module">Data.Fin</a>
+<a id="870" class="Keyword">open</a> <a id="875" class="Keyword">import</a> <a id="882" href="Data.String.html" class="Module">Data.String</a>
+<a id="894" class="Keyword">open</a> <a id="899" class="Keyword">import</a> <a id="906" href="Data.Unit.html" class="Module">Data.Unit</a>
+<a id="916" class="Keyword">open</a> <a id="921" class="Keyword">import</a> <a id="928" href="Data.Maybe.html" class="Module">Data.Maybe</a>
+<a id="939" class="Keyword">open</a> <a id="944" class="Keyword">import</a> <a id="951" href="Size.html" class="Module">Size</a>
+<a id="956" class="Keyword">open</a> <a id="961" class="Keyword">import</a> <a id="968" href="Relation.Binary.PropositionalEquality.Core.html" class="Module">Relation.Binary.PropositionalEquality.Core</a> <a id="1011" class="Keyword">public</a>
+<a id="1018" class="Keyword">open</a> <a id="1023" class="Keyword">import</a> <a id="1030" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a> <a id="1068" class="Keyword">hiding</a> <a id="1075" class="Symbol">(</a><a id="1076" href="Relation.Binary.PropositionalEquality.html#1365" class="Function">setoid</a> <a id="1083" class="Symbol">;</a> <a id="1085" href="Relation.Binary.PropositionalEquality.html#1903" class="Function">preorder</a> <a id="1094" class="Symbol">;</a> <a id="1096" href="Relation.Binary.PropositionalEquality.html#1504" class="Function">decSetoid</a><a id="1105" class="Symbol">;</a> <a id="1107" href="Relation.Binary.PropositionalEquality.html#3185" class="InductiveConstructor Operator">[_]</a><a id="1110" class="Symbol">)</a> <a id="1112" class="Keyword">public</a>
+<a id="1119" class="Keyword">open</a> <a id="1124" class="Keyword">import</a> <a id="1131" href="Data.Sum.html" class="Module">Data.Sum</a> <a id="1140" class="Keyword">public</a> <a id="1147" class="Keyword">hiding</a> <a id="1154" class="Symbol">(</a><a id="1155" href="Data.Sum.html#1152" class="Function">map</a><a id="1158" class="Symbol">)</a>
+
+<a id="1161" class="Comment">-- infix 3 _goesThru_</a>
+<a id="1183" class="Keyword">open</a> <a id="1188" class="Keyword">import</a> <a id="1195" href="GUI.GUIModel.html" class="Module">GUI.GUIModel</a>
+
+<a id="modelGuiInterface"></a><a id="1209" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a> <a id="1227" class="Symbol">:</a> <a id="1229" href="StateSizedIO.GUI.BaseStateDependent.html#441" class="Record">IOInterfaceˢ</a>
+<a id="1242" href="StateSizedIO.GUI.BaseStateDependent.html#506" class="Field">Stateˢ</a>   <a id="1251" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a>           <a id="1279" class="Symbol">=</a>  <a id="1282" href="GUI.GUIModel.html#2127" class="Datatype">GuiState</a>
+<a id="1291" href="StateSizedIO.GUI.BaseStateDependent.html#528" class="Field">Commandˢ</a>   <a id="1302" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a>         <a id="1328" class="Symbol">=</a>  <a id="1331" href="GUI.GUIModel.html#2228" class="Function">GuiCmd</a>
+<a id="1338" href="StateSizedIO.GUI.BaseStateDependent.html#559" class="Field">Responseˢ</a>  <a id="1349" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a>  <a id="1368" href="GUI.GUIModelUnused.html#1368" class="Bound">s</a> <a id="1370" href="GUI.GUIModelUnused.html#1370" class="Bound">m</a>    <a id="1375" class="Symbol">=</a>  <a id="1378" href="Agda.Builtin.Unit.html#69" class="Record">⊤</a>
+<a id="1380" href="StateSizedIO.GUI.BaseStateDependent.html#609" class="Field">nextˢ</a>    <a id="1389" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a>  <a id="1408" href="GUI.GUIModelUnused.html#1408" class="Bound">s</a> <a id="1410" href="GUI.GUIModelUnused.html#1410" class="Bound">m</a> <a id="1412" href="GUI.GUIModelUnused.html#1412" class="Bound">r</a>    <a id="1417" class="Symbol">=</a>  <a id="1420" href="GUI.GUIModel.html#3874" class="Function">guiNext</a> <a id="1428" href="GUI.GUIModelUnused.html#1408" class="Bound">s</a> <a id="1430" href="GUI.GUIModelUnused.html#1410" class="Bound">m</a>
+
+<a id="_-gui&#39;-&gt;_"></a><a id="1433" href="GUI.GUIModelUnused.html#1433" class="Function Operator">_-gui&#39;-&gt;_</a> <a id="1443" class="Symbol">:</a> <a id="1445" class="Symbol">(</a><a id="1446" href="GUI.GUIModelUnused.html#1446" class="Bound">s</a> <a id="1448" href="GUI.GUIModelUnused.html#1448" class="Bound">s&#39;</a> <a id="1451" class="Symbol">:</a> <a id="1453" href="GUI.GUIModel.html#2127" class="Datatype">GuiState</a><a id="1461" class="Symbol">)</a> <a id="1463" class="Symbol">→</a> <a id="1465" class="PrimitiveType">Set</a>
+<a id="1469" href="GUI.GUIModelUnused.html#1469" class="Bound">s</a> <a id="1471" href="GUI.GUIModelUnused.html#1433" class="Function Operator">-gui&#39;-&gt;</a> <a id="1479" href="GUI.GUIModelUnused.html#1479" class="Bound">s&#39;</a> <a id="1482" class="Symbol">=</a> <a id="1484" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3821" class="Function">IOˢindₚ₀</a> <a id="1493" href="GUI.GUIModelUnused.html#1209" class="Function">modelGuiInterface</a> <a id="1511" href="GUI.GUIModelUnused.html#1469" class="Bound">s</a> <a id="1513" href="GUI.GUIModelUnused.html#1479" class="Bound">s&#39;</a>
+</pre></body></html>

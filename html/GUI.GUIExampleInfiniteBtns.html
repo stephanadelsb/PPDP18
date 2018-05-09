@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>GUI.GUIExampleInfiniteBtns</title><link rel="stylesheet" href="Agda.css"></head><body><pre>
+
+
+<a id="4" class="Keyword">module</a> <a id="11" href="GUI.GUIExampleInfiniteBtns.html" class="Module">GUI.GUIExampleInfiniteBtns</a>   <a id="40" class="Keyword">where</a>
+
+
+<a id="48" class="Keyword">open</a> <a id="53" class="Keyword">import</a> <a id="60" href="StateSizedIO.GUI.BaseStateDependent.html" class="Module">StateSizedIO.GUI.BaseStateDependent</a>
+<a id="96" class="Keyword">open</a> <a id="101" class="Keyword">import</a> <a id="108" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html" class="Module">StateSizedIO.writingOOsUsingIOVers4ReaderMethods</a> <a id="157" class="Keyword">hiding</a> <a id="164" class="Symbol">(</a><a id="165" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#20924" class="Function">nˢ</a><a id="167" class="Symbol">)</a> <a id="169" class="Keyword">renaming</a><a id="177" class="Symbol">(</a><a id="178" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execˢⁱ</a> <a id="185" class="Symbol">to</a> <a id="188" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execᵢ</a> <a id="194" class="Symbol">;</a> <a id="196" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnˢⁱ</a> <a id="205" class="Symbol">to</a> <a id="208" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnᵢ</a><a id="215" class="Symbol">)</a>
+<a id="217" class="Keyword">open</a> <a id="222" class="Keyword">import</a> <a id="229" href="GUI.GUIDefinitions.html" class="Module">GUI.GUIDefinitions</a>
+<a id="248" class="Keyword">open</a> <a id="253" class="Keyword">import</a> <a id="260" href="GUI.GUIDefinitionsBase.html" class="Module">GUI.GUIDefinitionsBase</a>
+<a id="283" class="Keyword">open</a> <a id="288" class="Keyword">import</a> <a id="295" href="SizedIO.Base.html" class="Module">SizedIO.Base</a> <a id="308" class="Keyword">hiding</a> <a id="315" class="Symbol">(</a><a id="316" href="SizedIO.Base.html#1840" class="Function Operator">_&gt;&gt;_</a><a id="320" class="Symbol">)</a>
+<a id="322" class="Keyword">open</a> <a id="327" class="Keyword">import</a> <a id="334" href="SizedIO.Console.html" class="Module">SizedIO.Console</a> <a id="350" class="Keyword">hiding</a> <a id="357" class="Symbol">(</a><a id="358" href="SizedIO.Console.html#883" class="Function">main</a><a id="362" class="Symbol">)</a>
+
+<a id="365" class="Keyword">open</a> <a id="370" class="Keyword">import</a> <a id="377" href="Data.String.html" class="Module">Data.String</a> <a id="389" class="Keyword">hiding</a> <a id="396" class="Symbol">(</a><a id="397" href="Data.String.Base.html#1297" class="Function">show</a><a id="401" class="Symbol">)</a>
+<a id="403" class="Keyword">open</a> <a id="408" class="Keyword">import</a> <a id="415" href="GUI.GUIExampleLib.html" class="Module">GUI.GUIExampleLib</a>
+
+<a id="434" class="Keyword">open</a> <a id="439" class="Keyword">import</a> <a id="446" href="Data.Fin.html" class="Module">Data.Fin</a>
+
+<a id="456" class="Keyword">open</a> <a id="461" class="Keyword">import</a> <a id="468" href="Size.html" class="Module">Size</a>
+<a id="473" class="Keyword">open</a> <a id="478" class="Keyword">import</a> <a id="485" href="Data.Unit.html" class="Module">Data.Unit</a>
+<a id="495" class="Keyword">open</a> <a id="500" class="Keyword">import</a> <a id="507" href="Data.Product.html" class="Module">Data.Product</a>
+<a id="520" class="Keyword">open</a> <a id="525" class="Keyword">import</a> <a id="532" href="Data.Nat.html" class="Module">Data.Nat</a>
+<a id="541" class="Keyword">open</a> <a id="546" class="Keyword">import</a> <a id="553" href="Data.Nat.Show.html" class="Module">Data.Nat.Show</a> <a id="567" class="Keyword">using</a> <a id="573" class="Symbol">(</a><a id="574" href="Data.Nat.Show.html#951" class="Function">show</a><a id="578" class="Symbol">)</a>
+<a id="580" class="Keyword">open</a> <a id="585" class="Keyword">import</a> <a id="592" href="NativeIO.html" class="Module">NativeIO</a>
+
+<a id="nFrame"></a><a id="602" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="609" class="Symbol">:</a> <a id="611" class="Symbol">(</a><a id="612" href="GUI.GUIExampleInfiniteBtns.html#612" class="Bound">n</a> <a id="614" class="Symbol">:</a> <a id="616" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a><a id="617" class="Symbol">)</a> <a id="619" class="Symbol">→</a> <a id="621" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="627" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="634" href="Agda.Builtin.Nat.html#115" class="InductiveConstructor">zero</a> <a id="639" class="Symbol">=</a> <a id="641" href="GUI.GUIExampleLib.html#1358" class="Function">emptyFrame</a>
+<a id="652" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="659" class="Symbol">(</a><a id="660" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="664" href="GUI.GUIExampleInfiniteBtns.html#664" class="Bound">n</a><a id="665" class="Symbol">)</a> <a id="667" class="Symbol">=</a> <a id="669" href="GUI.GUIExampleLib.html#1379" class="Function">addButton</a> <a id="679" class="Symbol">(</a><a id="680" href="Data.Nat.Show.html#951" class="Function">show</a> <a id="685" href="GUI.GUIExampleInfiniteBtns.html#664" class="Bound">n</a><a id="686" class="Symbol">)</a> <a id="688" class="Symbol">(</a><a id="689" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="696" href="GUI.GUIExampleInfiniteBtns.html#664" class="Bound">n</a><a id="697" class="Symbol">)</a>
+
+<a id="700" class="Comment">{-
+not yet implemented
+propn : (n : ℕ) → properties (nFrame n)
+propn zero = (5 , 10 , 2 , 2) --oneColumnLayout
+propn (suc n) = black , (propn n)
+-}</a>
+
+
+<a id="850" class="Comment">{-
+Original version but seems redundant:
+mutual
+  objn : ∀ {i} → (n : ℕ) → GUIObj compStrucEx frame {i} (nFrame n)
+  objn zero .method ()
+  objn (suc n) .method m = return (nFrame (suc n) , objnaux (suc n))
+
+  objnaux : ∀ {i} → (n : ℕ) → GUIObj compStrucEx frame {i} (nFrame n)
+  objnaux n .method m = return (nFrame (suc n) , objnaux (suc n))
+-}</a>
+
+<a id="1198" class="Comment">{- obsolete, use nGUI below instead -}</a>
+<a id="objn"></a><a id="1237" href="GUI.GUIExampleInfiniteBtns.html#1237" class="Function">objn</a> <a id="1242" class="Symbol">:</a> <a id="1244" class="Symbol">∀</a> <a id="1246" class="Symbol">{</a><a id="1247" href="GUI.GUIExampleInfiniteBtns.html#1247" class="Bound">i</a><a id="1248" class="Symbol">}</a> <a id="1250" class="Symbol">→</a> <a id="1252" class="Symbol">(</a><a id="1253" href="GUI.GUIExampleInfiniteBtns.html#1253" class="Bound">n</a> <a id="1255" class="Symbol">:</a> <a id="1257" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a><a id="1258" class="Symbol">)</a> <a id="1260" class="Symbol">→</a> <a id="1262" href="GUI.GUIDefinitions.html#2551" class="Function">GUIObj</a> <a id="1269" href="GUI.GUIDefinitionsBase.html#1470" class="Function">frameCmpStruc</a> <a id="1283" href="GUI.GUIDefinitionsBase.html#548" class="InductiveConstructor">frame</a> <a id="1289" class="Symbol">{</a><a id="1290" href="GUI.GUIExampleInfiniteBtns.html#1247" class="Bound">i</a><a id="1291" class="Symbol">}</a> <a id="1293" class="Symbol">(</a><a id="1294" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="1301" href="GUI.GUIExampleInfiniteBtns.html#1253" class="Bound">n</a><a id="1302" class="Symbol">)</a>
+<a id="1304" href="GUI.GUIExampleInfiniteBtns.html#1237" class="Function">objn</a> <a id="1309" href="Agda.Builtin.Nat.html#115" class="InductiveConstructor">zero</a> <a id="1314" class="DottedPattern Symbol">.</a><a id="1315" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1322" class="Symbol">()</a>
+<a id="1325" href="GUI.GUIExampleInfiniteBtns.html#1237" class="Function">objn</a> <a id="1330" class="Symbol">(</a><a id="1331" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1335" href="GUI.GUIExampleInfiniteBtns.html#1335" class="Bound">n</a><a id="1336" class="Symbol">)</a> <a id="1338" class="DottedPattern Symbol">.</a><a id="1339" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1346" href="GUI.GUIExampleInfiniteBtns.html#1346" class="Bound">m</a> <a id="1348" class="Symbol">=</a> <a id="1350" href="SizedIO.Base.html#1288" class="Function">return</a> <a id="1357" class="Symbol">(</a><a id="1358" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="1365" class="Symbol">(</a><a id="1366" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1370" class="Symbol">(</a><a id="1371" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1375" href="GUI.GUIExampleInfiniteBtns.html#1335" class="Bound">n</a><a id="1376" class="Symbol">))</a> <a id="1379" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="1381" href="GUI.GUIExampleInfiniteBtns.html#1237" class="Function">objn</a> <a id="1386" class="Symbol">(</a><a id="1387" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1391" class="Symbol">(</a><a id="1392" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1396" href="GUI.GUIExampleInfiniteBtns.html#1335" class="Bound">n</a><a id="1397" class="Symbol">)))</a>
+
+
+<a id="nGUI"></a><a id="1403" href="GUI.GUIExampleInfiniteBtns.html#1403" class="Function">nGUI</a> <a id="1408" class="Symbol">:</a> <a id="1410" class="Symbol">∀{</a><a id="1412" href="GUI.GUIExampleInfiniteBtns.html#1412" class="Bound">i</a> <a id="1414" class="Symbol">:</a> <a id="1416" href="Agda.Builtin.Size.html#114" class="Postulate">Size</a><a id="1420" class="Symbol">}</a> <a id="1422" class="Symbol">(</a><a id="1423" href="GUI.GUIExampleInfiniteBtns.html#1423" class="Bound">n</a> <a id="1425" class="Symbol">:</a> <a id="1427" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a><a id="1428" class="Symbol">)</a> <a id="1430" class="Symbol">→</a> <a id="1432" href="GUI.GUIDefinitions.html#3386" class="Function">GUI</a> <a id="1436" class="Symbol">{</a><a id="1437" href="GUI.GUIExampleInfiniteBtns.html#1412" class="Bound">i</a><a id="1438" class="Symbol">}</a>
+<a id="1440" href="GUI.GUIExampleInfiniteBtns.html#1403" class="Function">nGUI</a> <a id="1445" href="GUI.GUIExampleInfiniteBtns.html#1445" class="Bound">n</a> <a id="1447" class="DottedPattern Symbol">.</a><a id="1448" href="GUI.GUIDefinitions.html#2765" class="DottedPattern Field">gui</a> <a id="1452" class="Symbol">=</a> <a id="1454" href="GUI.GUIExampleInfiniteBtns.html#602" class="Function">nFrame</a> <a id="1461" href="GUI.GUIExampleInfiniteBtns.html#1445" class="Bound">n</a>
+<a id="1463" href="GUI.GUIExampleInfiniteBtns.html#1403" class="Function">nGUI</a> <a id="1468" href="Agda.Builtin.Nat.html#115" class="InductiveConstructor">zero</a> <a id="1473" class="DottedPattern Symbol">.</a><a id="1474" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="1478" class="DottedPattern Symbol">.</a><a id="1479" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1486" class="Symbol">()</a>
+<a id="1489" href="GUI.GUIExampleInfiniteBtns.html#1403" class="Function">nGUI</a> <a id="1494" class="Symbol">(</a><a id="1495" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1499" href="GUI.GUIExampleInfiniteBtns.html#1499" class="Bound">n</a><a id="1500" class="Symbol">)</a> <a id="1502" class="DottedPattern Symbol">.</a><a id="1503" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="1507" class="DottedPattern Symbol">.</a><a id="1508" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1515" href="GUI.GUIExampleInfiniteBtns.html#1515" class="Bound">m</a> <a id="1517" class="Symbol">=</a>
+    <a id="1523" href="GUI.GUIDefinitions.html#3819" class="Function">returnGUI</a> <a id="1533" class="Symbol">(</a><a id="1534" href="GUI.GUIExampleInfiniteBtns.html#1403" class="Function">nGUI</a> <a id="1539" class="Symbol">(</a><a id="1540" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1544" class="Symbol">(</a><a id="1545" href="Agda.Builtin.Nat.html#128" class="InductiveConstructor">suc</a> <a id="1549" href="GUI.GUIExampleInfiniteBtns.html#1499" class="Bound">n</a><a id="1550" class="Symbol">)))</a>
+
+<a id="1555" class="Comment">{-
+main : NativeIO Unit
+main = compileProgram (nFrame 5) (propn 5) (objn 5)
+-}</a>
+</pre></body></html>

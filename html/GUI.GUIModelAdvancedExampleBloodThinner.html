@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>GUI.GUIModelAdvancedExampleBloodThinner</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">open</a> <a id="6" class="Keyword">import</a> <a id="13" href="Data.Bool.html" class="Module">Data.Bool</a>
+
+<a id="24" class="Keyword">module</a> <a id="31" href="GUI.GUIModelAdvancedExampleBloodThinner.html" class="Module">GUI.GUIModelAdvancedExampleBloodThinner</a>   <a id="73" class="Keyword">where</a>
+
+
+<a id="81" class="Keyword">open</a> <a id="86" class="Keyword">import</a> <a id="93" href="StateSizedIO.GUI.BaseStateDependent.html" class="Module">StateSizedIO.GUI.BaseStateDependent</a>
+<a id="129" class="Keyword">open</a> <a id="134" class="Keyword">import</a> <a id="141" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html" class="Module">StateSizedIO.writingOOsUsingIOVers4ReaderMethods</a> <a id="190" class="Keyword">hiding</a> <a id="197" class="Symbol">(</a><a id="198" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#20924" class="Function">nˢ</a><a id="200" class="Symbol">)</a> <a id="202" class="Keyword">renaming</a><a id="210" class="Symbol">(</a><a id="211" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execˢⁱ</a> <a id="218" class="Symbol">to</a> <a id="221" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3601" class="InductiveConstructor">execᵢ</a> <a id="227" class="Symbol">;</a> <a id="229" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnˢⁱ</a> <a id="238" class="Symbol">to</a> <a id="241" href="StateSizedIO.writingOOsUsingIOVers4ReaderMethods.html#3684" class="InductiveConstructor">returnᵢ</a><a id="248" class="Symbol">)</a>
+<a id="250" class="Keyword">open</a> <a id="255" class="Keyword">import</a> <a id="262" href="GUI.GUIDefinitions.html" class="Module">GUI.GUIDefinitions</a>
+<a id="281" class="Keyword">open</a> <a id="286" class="Keyword">import</a> <a id="293" href="GUI.GUIDefinitionsBase.html" class="Module">GUI.GUIDefinitionsBase</a>
+<a id="316" class="Keyword">open</a> <a id="321" class="Keyword">import</a> <a id="328" href="SizedIO.Base.html" class="Module">SizedIO.Base</a> <a id="341" class="Keyword">hiding</a> <a id="348" class="Symbol">(</a><a id="349" href="SizedIO.Base.html#1840" class="Function Operator">_&gt;&gt;_</a><a id="353" class="Symbol">)</a>
+<a id="355" class="Keyword">open</a> <a id="360" class="Keyword">import</a> <a id="367" href="SizedIO.Console.html" class="Module">SizedIO.Console</a>
+
+<a id="384" class="Keyword">open</a> <a id="389" class="Keyword">import</a> <a id="396" href="Data.String.html" class="Module">Data.String</a>
+<a id="408" class="Keyword">open</a> <a id="413" class="Keyword">import</a> <a id="420" href="GUI.GUIExampleLib.html" class="Module">GUI.GUIExampleLib</a>
+
+<a id="439" class="Keyword">open</a> <a id="444" class="Keyword">import</a> <a id="451" href="Data.Fin.html" class="Module">Data.Fin</a>
+<a id="460" class="Keyword">open</a> <a id="465" class="Keyword">import</a> <a id="472" href="Data.Nat.html" class="Module">Data.Nat</a>
+
+<a id="482" class="Keyword">open</a> <a id="487" class="Keyword">import</a> <a id="494" href="Size.html" class="Module">Size</a>
+<a id="499" class="Keyword">open</a> <a id="504" class="Keyword">import</a> <a id="511" href="Data.Unit.html" class="Module">Data.Unit</a>
+<a id="521" class="Keyword">open</a> <a id="526" class="Keyword">import</a> <a id="533" href="Data.Product.html" class="Module">Data.Product</a>
+
+<a id="547" class="Keyword">open</a> <a id="552" class="Keyword">import</a> <a id="559" href="Data.String.html" class="Module">Data.String</a> <a id="571" class="Keyword">renaming</a> <a id="580" class="Symbol">(</a><a id="581" href="Data.String.html#1639" class="Function Operator">_==_</a> <a id="586" class="Symbol">to</a> <a id="589" href="Data.String.html#1639" class="Function Operator">_==Str_</a><a id="596" class="Symbol">)</a>
+
+
+<a id="600" class="Keyword">open</a> <a id="605" class="Keyword">import</a> <a id="612" href="GUI.GUIModel.html" class="Module">GUI.GUIModel</a>
+<a id="625" class="Keyword">open</a> <a id="630" class="Keyword">import</a> <a id="637" href="GUI.GUIExample.html" class="Module">GUI.GUIExample</a>
+
+
+
+<a id="655" class="Comment">-- 1) draw and receive blood value</a>
+<a id="690" class="Comment">--    --&gt; get &quot;renalValue&quot;</a>
+<a id="717" class="Comment">--</a>
+
+<a id="721" class="Comment">-- 2) give either:</a>
+<a id="740" class="Comment">-- medicationOld  [if renalVal &lt;30]</a>
+<a id="776" class="Comment">-- medicationNew  [if renalVal &gt;= 30]</a>
+
+<a id="815" class="Comment">-- 3) final state: discharge</a>
+
+<a id="oneButtonFrame"></a><a id="845" href="GUI.GUIModelAdvancedExampleBloodThinner.html#845" class="Function">oneButtonFrame</a> <a id="860" class="Symbol">:</a> <a id="862" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="869" class="Symbol">→</a> <a id="871" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="877" href="GUI.GUIModelAdvancedExampleBloodThinner.html#845" class="Function">oneButtonFrame</a> <a id="892" href="GUI.GUIModelAdvancedExampleBloodThinner.html#892" class="Bound">str</a> <a id="896" class="Symbol">=</a> <a id="898" href="GUI.GUIExampleLib.html#1379" class="Function">addButton</a> <a id="908" href="GUI.GUIModelAdvancedExampleBloodThinner.html#892" class="Bound">str</a>  <a id="913" href="GUI.GUIExampleLib.html#1358" class="Function">emptyFrame</a>
+
+<a id="twoButtonFrame"></a><a id="925" href="GUI.GUIModelAdvancedExampleBloodThinner.html#925" class="Function">twoButtonFrame</a> <a id="940" class="Symbol">:</a> <a id="942" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="949" class="Symbol">→</a> <a id="951" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="958" class="Symbol">→</a> <a id="960" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="966" href="GUI.GUIModelAdvancedExampleBloodThinner.html#925" class="Function">twoButtonFrame</a> <a id="981" href="GUI.GUIModelAdvancedExampleBloodThinner.html#981" class="Bound">str1</a> <a id="986" href="GUI.GUIModelAdvancedExampleBloodThinner.html#986" class="Bound">str2</a> <a id="991" class="Symbol">=</a> <a id="993" href="GUI.GUIExampleLib.html#1379" class="Function">addButton</a> <a id="1003" href="GUI.GUIModelAdvancedExampleBloodThinner.html#986" class="Bound">str2</a> <a id="1008" class="Symbol">(</a><a id="1009" href="GUI.GUIModelAdvancedExampleBloodThinner.html#845" class="Function">oneButtonFrame</a> <a id="1024" href="GUI.GUIModelAdvancedExampleBloodThinner.html#981" class="Bound">str1</a><a id="1028" class="Symbol">)</a>
+
+<a id="1031" class="Comment">-- Data types</a>
+<a id="1045" class="Comment">--</a>
+<a id="1048" class="Keyword">data</a> <a id="RenalValue"></a><a id="1053" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1053" class="Datatype">RenalValue</a> <a id="1064" class="Symbol">:</a> <a id="1066" class="PrimitiveType">Set</a> <a id="1070" class="Keyword">where</a>
+  <a id="RenalValue.low"></a><a id="1078" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1078" class="InductiveConstructor">low</a> <a id="RenalValue.high"></a><a id="1082" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1082" class="InductiveConstructor">high</a> <a id="1087" class="Symbol">:</a> <a id="1089" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1053" class="Datatype">RenalValue</a>
+
+<a id="1101" class="Keyword">data</a> <a id="PatientAge"></a><a id="1106" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1106" class="Datatype">PatientAge</a> <a id="1117" class="Symbol">:</a> <a id="1119" class="PrimitiveType">Set</a> <a id="1123" class="Keyword">where</a>
+  <a id="PatientAge.normal"></a><a id="1131" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1131" class="InductiveConstructor">normal</a> <a id="PatientAge.greater75J"></a><a id="1138" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1138" class="InductiveConstructor">greater75J</a> <a id="1149" class="Symbol">:</a> <a id="1151" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1106" class="Datatype">PatientAge</a>
+
+<a id="1163" class="Keyword">postulate</a>
+  <a id="string2RenalValue"></a><a id="1175" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1175" class="Postulate">string2RenalValue</a> <a id="1193" class="Symbol">:</a> <a id="1195" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="1202" class="Symbol">→</a> <a id="1204" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1053" class="Datatype">RenalValue</a>
+  <a id="string2PatientAge"></a><a id="1217" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1217" class="Postulate">string2PatientAge</a> <a id="1235" class="Symbol">:</a> <a id="1237" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="1244" class="Symbol">→</a> <a id="1246" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1106" class="Datatype">PatientAge</a>
+
+
+
+
+<a id="frmRegistration"></a><a id="1261" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1261" class="Function">frmRegistration</a> <a id="1277" class="Symbol">:</a> <a id="1279" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="1285" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1261" class="Function">frmRegistration</a> <a id="1301" class="Symbol">=</a> <a id="1303" href="GUI.GUIExampleLib.html#1379" class="Function">addButton</a> <a id="1313" class="String">&quot;OK&quot;</a> <a id="1318" class="Symbol">(</a><a id="1319" href="GUI.GUIExampleLib.html#1417" class="Function">addLabel</a> <a id="1328" class="String">&quot;Enter Age:&quot;</a> <a id="1341" href="GUI.GUIExampleLib.html#1358" class="Function">emptyFrame</a><a id="1351" class="Symbol">)</a>
+
+
+
+
+
+<a id="frmDrawBlood"></a><a id="1358" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1358" class="Function">frmDrawBlood</a> <a id="1371" class="Symbol">:</a> <a id="1373" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="1379" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1358" class="Function">frmDrawBlood</a> <a id="1392" class="Symbol">=</a> <a id="1394" href="GUI.GUIExampleLib.html#1379" class="Function">addButton</a> <a id="1404" class="String">&quot;draw&quot;</a> <a id="1411" class="Symbol">(</a><a id="1412" href="GUI.GUIExampleLib.html#1417" class="Function">addLabel</a> <a id="1421" class="String">&quot;renalValue&quot;</a> <a id="1434" href="GUI.GUIExampleLib.html#1358" class="Function">emptyFrame</a><a id="1444" class="Symbol">)</a>
+
+<a id="frmDischarge"></a><a id="1447" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1447" class="Function">frmDischarge</a> <a id="1460" class="Symbol">:</a> <a id="1462" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="1468" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1447" class="Function">frmDischarge</a> <a id="1481" class="Symbol">=</a> <a id="1483" class="Symbol">(</a><a id="1484" href="GUI.GUIExampleLib.html#1417" class="Function">addLabel</a> <a id="1493" class="String">&quot;Finished&quot;</a> <a id="1504" href="GUI.GUIExampleLib.html#1358" class="Function">emptyFrame</a><a id="1514" class="Symbol">)</a>
+
+
+
+<a id="frmDecideMedication"></a><a id="1519" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1519" class="Function">frmDecideMedication</a> <a id="1539" class="Symbol">:</a> <a id="1541" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1053" class="Datatype">RenalValue</a> <a id="1552" class="Symbol">→</a> <a id="1554" href="GUI.GUIDefinitions.html#3182" class="Function">Frame</a>
+<a id="1560" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1519" class="Function">frmDecideMedication</a> <a id="1580" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1078" class="InductiveConstructor">low</a> <a id="1584" class="Symbol">=</a> <a id="1586" href="GUI.GUIModelAdvancedExampleBloodThinner.html#845" class="Function">oneButtonFrame</a> <a id="1601" class="String">&quot;OldMedication&quot;</a>
+<a id="1617" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1519" class="Function">frmDecideMedication</a> <a id="1637" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1082" class="InductiveConstructor">high</a> <a id="1642" class="Symbol">=</a> <a id="1644" href="GUI.GUIModelAdvancedExampleBloodThinner.html#845" class="Function">oneButtonFrame</a> <a id="1659" class="String">&quot;NewMedication&quot;</a>
+
+
+<a id="1677" class="Comment">{- TODO later:
+RenalValue : Set
+RenalValue = ℕ -}</a>
+
+
+<a id="dischargeGUI"></a><a id="1729" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1729" class="Function">dischargeGUI</a> <a id="1742" class="Symbol">:</a> <a id="1744" class="Symbol">∀</a> <a id="1746" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1746" class="Bound">i</a> <a id="1748" class="Symbol">→</a> <a id="1750" href="GUI.GUIDefinitions.html#3386" class="Function">GUI</a> <a id="1754" class="Symbol">{</a><a id="1755" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1746" class="Bound">i</a><a id="1756" class="Symbol">}</a>
+<a id="1758" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1729" class="Function">dischargeGUI</a> <a id="1771" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1771" class="Bound">i</a> <a id="1773" class="DottedPattern Symbol">.</a><a id="1774" href="GUI.GUIDefinitions.html#2765" class="DottedPattern Field">gui</a> <a id="1778" class="Symbol">=</a> <a id="1780" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1447" class="Function">frmDischarge</a>
+<a id="1793" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1729" class="Function">dischargeGUI</a> <a id="1806" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1806" class="Bound">i</a> <a id="1808" class="DottedPattern Symbol">.</a><a id="1809" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="1813" class="DottedPattern Symbol">.</a><a id="1814" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1821" class="Symbol">{</a><a id="1822" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1822" class="Bound">j</a><a id="1823" class="Symbol">}</a> <a id="1825" class="Symbol">()</a>
+
+<a id="decideMedicationGUI"></a><a id="1829" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="1849" class="Symbol">:</a> <a id="1851" class="Symbol">∀</a> <a id="1853" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1853" class="Bound">i</a> <a id="1855" class="Symbol">→</a> <a id="1857" class="Symbol">(</a><a id="1858" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1858" class="Bound">rv</a> <a id="1861" class="Symbol">:</a> <a id="1863" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1053" class="Datatype">RenalValue</a><a id="1873" class="Symbol">)</a> <a id="1875" class="Symbol">→</a> <a id="1877" href="GUI.GUIDefinitions.html#3386" class="Function">GUI</a> <a id="1881" class="Symbol">{</a><a id="1882" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1853" class="Bound">i</a><a id="1883" class="Symbol">}</a>
+<a id="1885" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="1905" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1905" class="Bound">i</a> <a id="1907" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1907" class="Bound">rv</a> <a id="1910" class="DottedPattern Symbol">.</a><a id="1911" href="GUI.GUIDefinitions.html#2765" class="DottedPattern Field">gui</a> <a id="1915" class="Symbol">=</a> <a id="1917" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1519" class="Function">frmDecideMedication</a> <a id="1937" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1907" class="Bound">rv</a>
+<a id="1940" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="1960" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1960" class="Bound">i</a> <a id="1962" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1078" class="InductiveConstructor">low</a> <a id="1966" class="DottedPattern Symbol">.</a><a id="1967" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="1971" class="DottedPattern Symbol">.</a><a id="1972" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="1979" class="Symbol">{</a><a id="1980" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1980" class="Bound">j</a><a id="1981" class="Symbol">}</a> <a id="1983" class="Symbol">(</a><a id="1984" href="Data.Fin.html#945" class="InductiveConstructor">zero</a> <a id="1989" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="1991" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor">tt</a><a id="1993" class="Symbol">)</a> <a id="1995" class="Symbol">=</a> <a id="1997" href="GUI.GUIDefinitions.html#3819" class="Function">returnGUI</a> <a id="2007" class="Symbol">(</a><a id="2008" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1729" class="Function">dischargeGUI</a> <a id="2021" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1980" class="Bound">j</a><a id="2022" class="Symbol">)</a>
+<a id="2024" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="2044" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2044" class="Bound">i</a> <a id="2046" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1078" class="InductiveConstructor">low</a> <a id="2050" class="DottedPattern Symbol">.</a><a id="2051" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="2055" class="DottedPattern Symbol">.</a><a id="2056" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="2063" class="Symbol">{</a><a id="2064" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2064" class="Bound">j</a><a id="2065" class="Symbol">}</a> <a id="2067" class="Symbol">(</a><a id="2068" href="Data.Fin.html#976" class="InductiveConstructor">suc</a> <a id="2072" class="Symbol">()</a> <a id="2075" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="2077" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor">tt</a><a id="2079" class="Symbol">)</a>
+<a id="2081" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="2101" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2101" class="Bound">i</a> <a id="2103" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1082" class="InductiveConstructor">high</a> <a id="2108" class="DottedPattern Symbol">.</a><a id="2109" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="2113" class="DottedPattern Symbol">.</a><a id="2114" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="2121" class="Symbol">{</a><a id="2122" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2122" class="Bound">j</a><a id="2123" class="Symbol">}</a> <a id="2125" class="Symbol">(</a><a id="2126" href="Data.Fin.html#945" class="InductiveConstructor">zero</a> <a id="2131" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="2133" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor">tt</a> <a id="2136" class="Symbol">)</a> <a id="2138" class="Symbol">=</a> <a id="2140" href="GUI.GUIDefinitions.html#3819" class="Function">returnGUI</a> <a id="2150" class="Symbol">(</a><a id="2151" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1729" class="Function">dischargeGUI</a> <a id="2164" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2122" class="Bound">j</a><a id="2165" class="Symbol">)</a>
+<a id="2167" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="2187" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2187" class="Bound">i</a> <a id="2189" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1082" class="InductiveConstructor">high</a> <a id="2194" class="DottedPattern Symbol">.</a><a id="2195" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="2199" class="DottedPattern Symbol">.</a><a id="2200" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="2207" class="Symbol">{</a><a id="2208" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2208" class="Bound">j</a><a id="2209" class="Symbol">}</a> <a id="2211" class="Symbol">(</a><a id="2212" href="Data.Fin.html#976" class="InductiveConstructor">suc</a> <a id="2216" class="Symbol">()</a> <a id="2219" href="Data.Product.html#543" class="InductiveConstructor Operator">,</a> <a id="2221" href="Agda.Builtin.Unit.html#106" class="InductiveConstructor">tt</a> <a id="2224" class="Symbol">)</a>
+
+<a id="drawBloodGUI"></a><a id="2227" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2227" class="Function">drawBloodGUI</a> <a id="2240" class="Symbol">:</a> <a id="2242" class="Symbol">∀</a> <a id="2244" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2244" class="Bound">i</a> <a id="2246" class="Symbol">→</a> <a id="2248" href="GUI.GUIDefinitions.html#3386" class="Function">GUI</a> <a id="2252" class="Symbol">{</a><a id="2253" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2244" class="Bound">i</a><a id="2254" class="Symbol">}</a>
+<a id="2256" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2227" class="Function">drawBloodGUI</a> <a id="2269" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2269" class="Bound">i</a> <a id="2271" class="DottedPattern Symbol">.</a><a id="2272" href="GUI.GUIDefinitions.html#2765" class="DottedPattern Field">gui</a> <a id="2276" class="Symbol">=</a> <a id="2278" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1358" class="Function">frmDrawBlood</a>
+<a id="2291" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2227" class="Function">drawBloodGUI</a> <a id="2304" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2304" class="Bound">i</a> <a id="2306" class="DottedPattern Symbol">.</a><a id="2307" href="GUI.GUIDefinitions.html#2792" class="DottedPattern Field">obj</a> <a id="2311" class="DottedPattern Symbol">.</a><a id="2312" href="StateSizedIO.GUI.BaseStateDependent.html#6639" class="DottedPattern Field">method</a> <a id="2319" class="Symbol">{</a><a id="2320" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2320" class="Bound">j</a><a id="2321" class="Symbol">}</a> <a id="2323" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2323" class="Bound">m</a> <a id="2325" class="Symbol">=</a>
+ <a id="2328" href="SizedIO.Base.html#1363" class="Function">exec</a> <a id="2333" class="Symbol">(</a><a id="2334" href="SizedIO.Console.html#182" class="InductiveConstructor">putStrLn</a> <a id="2343" class="String">&quot;What is the renal value?&quot;</a><a id="2369" class="Symbol">)</a> <a id="2371" class="Symbol">λ</a> <a id="2373" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2373" class="Bound">_</a> <a id="2375" class="Symbol">→</a>
+ <a id="2378" href="SizedIO.Base.html#1363" class="Function">exec</a> <a id="2383" href="SizedIO.Console.html#219" class="InductiveConstructor">getLine</a> <a id="2391" class="Symbol">λ</a> <a id="2393" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2393" class="Bound">s</a> <a id="2395" class="Symbol">→</a>
+ <a id="2398" href="GUI.GUIDefinitions.html#3819" class="Function">returnGUI</a>  <a id="2409" class="Symbol">(</a><a id="2410" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1829" class="Function">decideMedicationGUI</a> <a id="2430" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2320" class="Bound">j</a> <a id="2432" class="Symbol">(</a><a id="2433" href="GUI.GUIModelAdvancedExampleBloodThinner.html#1175" class="Postulate">string2RenalValue</a> <a id="2451" href="GUI.GUIModelAdvancedExampleBloodThinner.html#2393" class="Bound">s</a><a id="2452" class="Symbol">))</a>
+
+
+
+
+
+
+
+
+
+
+<a id="2465" class="Comment">{-
+--
+-- This exmaple also works with interactivity:
+--    first step is &quot;check gender&quot;
+--    doctor enters gender
+--
+
+
+frmExam : Frame
+frmExam = addButton &quot;Examination&quot;  emptyFrame
+
+
+
+frmPreg : Frame
+frmPreg = addButton &quot;Check for Preg&quot;  emptyFrame
+
+
+--
+-- TODO: Label is currently missing!
+--
+--
+
+frmXRay : Frame
+frmXRay = addButton &quot;X-Ray&quot; emptyFrame
+
+frmTreatm : Frame
+frmTreatm = addButton &quot;Treatment&quot; emptyFrame
+
+frmFinished : Frame
+frmFinished = addLabel &quot;Finished&quot; emptyFrame
+
+
+data Sex : Set where
+  male female : Sex
+
+bool2Sex : Bool → Sex
+bool2Sex true = female
+bool2Sex false = male
+
+string2Sex : String → Sex
+string2Sex str = bool2Sex (str ==Str &quot;f&quot;)
+
+{-
+ objStartGUI : ∀ i → GUIFrameObj {i} BtnGUIStart
+ objStartGUI i .method {j} m = return (BtnGUIXRay , objGUIXRay j)
+-}
+
+mutual
+ hdlExam : ∀ i → GUIFrameObj {i} frmExam
+ hdlExam i .method {j} m =
+   exec (putStrLn &quot;Female or Male?&quot;) λ _ →
+   exec getLine λ s →
+   hdlExamProgEnd i (string2Sex s)
+
+
+ hdlExamProgEnd : (i : Size)(g : Sex) → GUIObjIOType i frmExam zero
+ hdlExamProgEnd i female  =
+        return (frmPreg , hdlPreg i)
+ hdlExamProgEnd i male    =
+        return (frmXRay , hdlXRay i)
+
+
+ hdlPreg : ∀ i → GUIFrameObj {i} frmPreg
+ hdlPreg i .method {j} m =
+   return (frmXRay , hdlXRay j)
+
+ hdlXRay : ∀ i → GUIFrameObj {i} frmXRay
+ hdlXRay i .method {j} m =
+   return (frmTreatm , hdlTreatm j)
+
+ hdlTreatm : ∀ i →  GUIFrameObj {i} frmTreatm
+ hdlTreatm i  .method {j} m =
+   return (frmFinished , hdlFinished j)
+
+ hdlFinished : ∀ i →  GUIFrameObj {i} frmFinished
+ hdlFinished i .method {j} ()
+
+{-
+main : NativeIO Unit
+main = compileProgram  frmExam propOneBtn (hdlExam ∞) -- propFrmExam
+-}
+
+-- states
+
+
+stateExam : GuiState
+stateExam = state  frmExam (hdlExam ∞) notStarted
+
+
+stateExam₁ : ModelGuiCommand stateExam → GuiState
+stateExam₁ = modelGuiNext stateExam
+
+
+-- from original version:
+-- methodsG frmExam
+-- to be replaced by
+-- ModelGuiCommand stateExam
+
+
+
+stateExam₂ : (c : ModelGuiCommand stateExam) (str : String) → GuiState
+stateExam₂ c str = modelGuiNext (stateExam₁ c) str
+
+
+
+
+
+-- propFrmExam
+
+statePreg : GuiState
+statePreg = state  frmPreg   -- propFrmPreg
+                  (hdlPreg ∞) notStarted
+
+
+stateXRay : GuiState
+stateXRay = state  frmXRay -- propFrmXRay
+                  (hdlXRay ∞) notStarted
+
+
+stateTreatm : GuiState
+stateTreatm = state  frmTreatm -- propFrmTreatm
+                       (hdlTreatm ∞) notStarted
+
+
+
+
+mutual
+
+
+  examGoesThruXRay :
+     (path : stateExam -gui-&gt; stateTreatm)
+     → path goesThru stateXRay
+  examGoesThruXRay (step c p) =
+         inj₂ (exam₁GoesThruXRay c p)
+
+
+  exam₁GoesThruXRay : (c : ModelGuiCommand stateExam)
+                       (path : stateExam₁ c -gui-&gt; stateTreatm)
+                       → path goesThru stateXRay
+  exam₁GoesThruXRay c (step str p) =
+          inj₂ (exam₂GoesThruXRay c str p)
+
+
+  exam₂GoesThruXRay :
+      (c : ModelGuiCommand stateExam) (str : String)
+      (path : stateExam₂ c str -gui-&gt; stateTreatm)
+      → path goesThru stateXRay
+  exam₂GoesThruXRay c str path with (string2Sex str)
+  ...  |  male    =  XRayGoesThruXRay       path
+  ...  |  female  =  checkPregGoesThruXRay  path
+
+
+
+
+
+  checkPregGoesThruXRay : (path : statePreg -gui-&gt; stateTreatm)
+                               → path goesThru stateXRay
+  checkPregGoesThruXRay (step c q) = inj₂ (XRayGoesThruXRay q)
+
+  XRayGoesThruXRay : (path : stateXRay -gui-&gt; stateTreatm)
+                      → path goesThru stateXRay
+  XRayGoesThruXRay path = goesThruSelf path
+
+
+
+mutual
+
+  examEventuallyTreatm
+          : stateExam -eventually-&gt; stateTreatm
+  examEventuallyTreatm =  next λ c →
+                          exam₁EventuallyTreatm c
+
+
+  exam₁EventuallyTreatm :  (c : ModelGuiCommand stateExam) →
+                            (stateExam₁ c) -eventually-&gt; stateTreatm
+  exam₁EventuallyTreatm  c = next λ str → exam₂EventuallyTreatm c str
+
+
+
+  exam₂EventuallyTreatm :
+       (c : ModelGuiCommand stateExam)  (str : String)
+       →  (stateExam₂ c str) -eventually-&gt; stateTreatm
+  exam₂EventuallyTreatm  c str with (string2Sex str)
+  ...  |  female  =  checkPregEventuallyTreatm
+  ...  |  male    =  xRayEventuallyTreatm
+
+
+
+
+
+  checkPregEventuallyTreatm : statePreg -eventually-&gt; stateTreatm
+  checkPregEventuallyTreatm  =  next λ c →
+                                xRayEventuallyTreatm
+
+  xRayEventuallyTreatm : stateXRay -eventually-&gt; stateTreatm
+  xRayEventuallyTreatm  = next λ c → treatmEventuallyTreatm
+
+  treatmEventuallyTreatm : stateTreatm -eventually-&gt; stateTreatm
+  treatmEventuallyTreatm  = hasReached
+-}</a>
+</pre></body></html>

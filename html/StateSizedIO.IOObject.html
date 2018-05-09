@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>StateSizedIO.IOObject</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="StateSizedIO.IOObject.html" class="Module">StateSizedIO.IOObject</a> <a id="30" class="Keyword">where</a>
+
+<a id="37" class="Keyword">open</a> <a id="42" class="Keyword">import</a> <a id="49" href="Data.Product.html" class="Module">Data.Product</a>
+
+<a id="63" class="Keyword">open</a> <a id="68" class="Keyword">import</a> <a id="75" href="Size.html" class="Module">Size</a>
+
+<a id="81" class="Keyword">open</a> <a id="86" class="Keyword">import</a> <a id="93" href="SizedIO.Base.html" class="Module">SizedIO.Base</a>
+<a id="106" class="Keyword">open</a> <a id="111" class="Keyword">import</a> <a id="118" href="StateSizedIO.Object.html" class="Module">StateSizedIO.Object</a>
+
+
+
+<a id="141" class="Comment">-- --- Moved to BaseNonPoly.agda</a>
+<a id="174" class="Comment">-- --- and  /src/StateSizedIO/GUI/BaseStateDependent.agda</a>
+<a id="232" class="Comment">-- ---  FILE IS DELETED !!!</a>
+<a id="260" class="Comment">-- ---</a>
+<a id="267" class="Comment">-- ---</a>
+
+
+<a id="276" class="Comment">-- An IO object is like a simple object,</a>
+<a id="317" class="Comment">-- but the method returns IO applied to the result type of a simple object</a>
+<a id="392" class="Comment">-- which means the method returns an IO program which when terminating</a>
+<a id="463" class="Comment">-- returns the result of the simple object</a>
+
+
+
+<a id="509" class="Comment">{- NOTE   IOObject is now replaced by IOObjectˢ as defined in
+          StateSizedIO.Base
+-}</a>
+
+<a id="603" class="Comment">{-
+module _  (ioi  : IOInterface)  (let C = Command ioi)  (let R = Response ioi)
+          (oi   : Interfaceˢ)    (let S = Stateˢ oi)     (let M  = Methodˢ oi)
+                                (let Rt  = Resultˢ oi) (let next = nextˢ oi)
+
+  where
+
+  record IOObject (i : Size) (s : S) : Set where
+    coinductive
+    field
+      method : ∀{j : Size&lt; i} (m : M s) → IO ioi ∞ (Σ[ r ∈ Rt s m ] IOObject j (next s m r) )
+
+open IOObject public
+-}</a>
+</pre></body></html>

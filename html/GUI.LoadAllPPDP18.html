@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>GUI.LoadAllPPDP18</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="GUI.LoadAllPPDP18.html" class="Module">GUI.LoadAllPPDP18</a> <a id="26" class="Keyword">where</a>
+
+<a id="33" class="Comment">-- this file loads the files containing the code examples in the</a>
+<a id="98" class="Comment">-- PPDP18 paper of Andreas Adelsberger, Anton Setzer and Eric Walkinshaw, ordered by sections</a>
+
+<a id="193" class="Comment">-- Abstract</a>
+<a id="205" class="Comment">-- 1. Introduction</a>
+<a id="224" class="Comment">-- 2. Background</a>
+
+<a id="242" class="Keyword">open</a> <a id="247" class="Keyword">import</a> <a id="254" href="SizedIO.Base.html" class="Module">SizedIO.Base</a>
+
+<a id="268" class="Comment">-- 3. A Library for Declarative, State-Dependent GUI programming</a>
+<a id="333" class="Comment">-- 3.1. Introductory Example: A GUI with Infinitely Many States</a>
+
+<a id="398" class="Keyword">open</a> <a id="403" class="Keyword">import</a> <a id="410" href="GUI.GUIExampleInfiniteBtnsAdvanced.html" class="Module">GUI.GUIExampleInfiniteBtnsAdvanced</a>
+
+<a id="446" class="Comment">-- 3.2. State-dependent Objects</a>
+
+<a id="479" class="Keyword">open</a> <a id="484" class="Keyword">import</a> <a id="491" href="StateSizedIO.GUI.BaseStateDependentWithoutSizes.html" class="Module">StateSizedIO.GUI.BaseStateDependentWithoutSizes</a>
+
+<a id="540" class="Comment">-- 3.3. A Data Type for GUIs</a>
+
+<a id="570" class="Keyword">open</a> <a id="575" class="Keyword">import</a> <a id="582" href="GUI.GUIDefinitionsSpecific.html" class="Module">GUI.GUIDefinitionsSpecific</a>
+<a id="609" class="Keyword">open</a> <a id="614" class="Keyword">import</a> <a id="621" href="GUI.GUIExampleLib.html" class="Module">GUI.GUIExampleLib</a>
+
+<a id="640" class="Comment">-- 3.4. Implementation Details</a>
+
+<a id="672" class="Keyword">open</a> <a id="677" class="Keyword">import</a> <a id="684" href="GUI.GUICompilation.html" class="Module">GUI.GUICompilation</a>
+<a id="703" class="Keyword">open</a> <a id="708" class="Keyword">import</a> <a id="715" href="GUI.RasterificFFI.html" class="Module">GUI.RasterificFFI</a>
+
+<a id="734" class="Comment">-- The Haskell code for the FFI interface can be found in</a>
+<a id="792" class="Comment">-- examples/GUI/DeclareGUI/*.hs</a>
+
+<a id="825" class="Comment">-- 4. Reasoning About GUI Applications</a>
+
+<a id="865" class="Comment">-- 4.1. Reasoning about Coinductive Programs</a>
+
+<a id="911" class="Keyword">open</a> <a id="916" class="Keyword">import</a> <a id="923" href="GUI.GUIModelRenamed.html" class="Module">GUI.GUIModelRenamed</a>
+
+<a id="944" class="Comment">-- 4.2 Properties Over GUI Application States</a>
+
+<a id="991" class="Keyword">open</a> <a id="996" class="Keyword">import</a> <a id="1003" href="GUI.GUIModelRenamed.html" class="Module">GUI.GUIModelRenamed</a>
+
+<a id="1024" class="Comment">-- 5. Case Study: Healthcare Process Models</a>
+<a id="1068" class="Comment">-- 5.1. A Process for Prescribing Oral Anticoagulants</a>
+<a id="1122" class="Comment">-- 5.2. Formalization of Business Processes</a>
+
+<a id="1167" class="Keyword">open</a> <a id="1172" class="Keyword">import</a> <a id="1179" href="GUI.BusinessProcess.html" class="Module">GUI.BusinessProcess</a>
+<a id="1199" class="Keyword">open</a> <a id="1204" class="Keyword">import</a> <a id="1211" href="GUI.BusinessProcessMedExLib.html" class="Module">GUI.BusinessProcessMedExLib</a>
+<a id="1239" class="Keyword">open</a> <a id="1244" class="Keyword">import</a> <a id="1251" href="GUI.BusinessProcessMedExVers3.html" class="Module">GUI.BusinessProcessMedExVers3</a>
+
+<a id="1282" class="Comment">-- Advanced example with check conditions for inputs mentioned in footnote 6</a>
+
+<a id="1360" class="Keyword">open</a> <a id="1365" class="Keyword">import</a> <a id="1372" href="GUI.BusinessProcessVers2.html" class="Module">GUI.BusinessProcessVers2</a>
+<a id="1397" class="Keyword">open</a> <a id="1402" class="Keyword">import</a> <a id="1409" href="GUI.BusinessProcessMedExVers4.html" class="Module">GUI.BusinessProcessMedExVers4</a>
+
+<a id="1440" class="Comment">-- 5.3. From Business Processes to GUI Applications</a>
+
+<a id="1493" class="Keyword">open</a> <a id="1498" class="Keyword">import</a> <a id="1505" href="GUI.BusinessProcessMedExVers3.html" class="Module">GUI.BusinessProcessMedExVers3</a>
+<a id="1535" class="Keyword">open</a> <a id="1540" class="Keyword">import</a> <a id="1547" href="GUI.BusinessProcessMedExVers3Compiled.html" class="Module">GUI.BusinessProcessMedExVers3Compiled</a>
+
+<a id="1586" class="Comment">-- Advanced example with check conditions for inputs mentioned in footnote 6</a>
+
+<a id="1664" class="Keyword">open</a> <a id="1669" class="Keyword">import</a> <a id="1676" href="GUI.BusinessProcessMedExVers4.html" class="Module">GUI.BusinessProcessMedExVers4</a>
+<a id="1706" class="Keyword">open</a> <a id="1711" class="Keyword">import</a> <a id="1718" href="GUI.BusinessProcessMedExVers4Compiled.html" class="Module">GUI.BusinessProcessMedExVers4Compiled</a>
+
+<a id="1757" class="Comment">-- 5.4. Verifying GUI Applications</a>
+
+<a id="1793" class="Keyword">open</a> <a id="1798" class="Keyword">import</a> <a id="1805" href="GUI.BusinessProcessMedExVers3.html" class="Module">GUI.BusinessProcessMedExVers3</a>
+<a id="1835" class="Keyword">open</a> <a id="1840" class="Keyword">import</a> <a id="1847" href="GUI.BusinessProcessMedExVers3Part2.html" class="Module">GUI.BusinessProcessMedExVers3Part2</a>
+
+<a id="1883" class="Comment">-- Advanced example with check conditions for inputs mentioned in footnote 6</a>
+
+<a id="1961" class="Keyword">open</a> <a id="1966" class="Keyword">import</a> <a id="1973" href="GUI.BusinessProcessMedExVers4.html" class="Module">GUI.BusinessProcessMedExVers4</a>
+<a id="2003" class="Keyword">open</a> <a id="2008" class="Keyword">import</a> <a id="2015" href="GUI.BusinessProcessMedExVers4Part2.html" class="Module">GUI.BusinessProcessMedExVers4Part2</a>
+</pre></body></html>

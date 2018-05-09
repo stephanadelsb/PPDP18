@@ -1,0 +1,3 @@
+name: ionew
+depend: standard-library
+include: .

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>GUI.BusinessProcessCompiled</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="GUI.BusinessProcessCompiled.html" class="Module">GUI.BusinessProcessCompiled</a>   <a id="38" class="Keyword">where</a>
+
+
+<a id="46" class="Keyword">open</a> <a id="51" class="Keyword">import</a> <a id="58" href="GUI.BusinessProcess.html" class="Module">GUI.BusinessProcess</a>
+<a id="78" class="Keyword">open</a> <a id="83" class="Keyword">import</a> <a id="90" href="GUI.RasterificFFI.html" class="Module">GUI.RasterificFFI</a>
+<a id="108" class="Keyword">open</a> <a id="113" class="Keyword">import</a> <a id="120" href="GUI.GUICompilation.html" class="Module">GUI.GUICompilation</a> <a id="139" class="Keyword">hiding</a> <a id="146" class="Symbol">(</a><a id="147" href="GUI.GUICompilation.html#4149" class="Function">main</a><a id="151" class="Symbol">)</a>
+
+<a id="154" class="Keyword">open</a> <a id="159" class="Keyword">import</a> <a id="166" href="NativeIO.html" class="Module">NativeIO</a> <a id="175" class="Keyword">renaming</a> <a id="184" class="Symbol">(</a><a id="185" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="194" class="Symbol">to</a> <a id="197" href="NativeIO.html#260" class="Postulate">IO</a><a id="199" class="Symbol">;</a>
+                               <a id="232" href="NativeIO.html#287" class="Postulate">nativeReturn</a> <a id="245" class="Symbol">to</a> <a id="248" href="NativeIO.html#287" class="Postulate">return</a><a id="254" class="Symbol">;</a>
+                               <a id="287" href="NativeIO.html#331" class="Postulate Operator">_native&gt;&gt;=_</a> <a id="299" class="Symbol">to</a> <a id="302" href="NativeIO.html#331" class="Postulate Operator">_&gt;&gt;=_</a><a id="307" class="Symbol">;</a>
+                               <a id="340" href="NativeIO.html#405" class="Postulate Operator">_native&gt;&gt;_</a> <a id="351" class="Symbol">to</a> <a id="354" href="NativeIO.html#405" class="Postulate Operator">_&gt;&gt;_</a><a id="358" class="Symbol">)</a>
+
+
+
+<a id="main"></a><a id="363" href="GUI.BusinessProcessCompiled.html#363" class="Function">main</a> <a id="368" class="Symbol">:</a> <a id="370" href="NativeIO.html#260" class="Postulate">IO</a> <a id="373" href="Unit.html#28" class="Record">Unit</a>
+<a id="378" href="GUI.BusinessProcessCompiled.html#363" class="Function">main</a> <a id="383" class="Symbol">=</a> <a id="385" class="Keyword">do</a>
+  <a id="390" href="GUI.BusinessProcessCompiled.html#390" class="Bound">win</a> <a id="394" href="NativeIO.html#331" class="Postulate Operator">&lt;-</a> <a id="397" href="GUI.RasterificFFI.html#1907" class="Postulate">createWindowFFI</a>
+  <a id="415" href="GUI.GUICompilation.html#2965" class="Function">compile</a> <a id="423" href="GUI.BusinessProcessCompiled.html#390" class="Bound">win</a> <a id="427" href="GUI.BusinessProcess.html#5666" class="Function">patientRegistrationGUI</a>
+</pre></body></html>

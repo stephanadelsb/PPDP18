@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>NativeIO</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Keyword">module</a> <a id="8" href="NativeIO.html" class="Module">NativeIO</a> <a id="17" class="Keyword">where</a>
+
+<a id="24" class="Keyword">open</a> <a id="29" class="Keyword">import</a> <a id="36" href="Unit.html" class="Module">Unit</a> <a id="41" class="Keyword">public</a>
+<a id="48" class="Keyword">open</a> <a id="53" class="Keyword">import</a> <a id="60" href="Data.List.html" class="Module">Data.List</a>
+<a id="70" class="Keyword">open</a> <a id="75" class="Keyword">import</a> <a id="82" href="Data.Nat.html" class="Module">Data.Nat</a>
+<a id="91" class="Keyword">open</a> <a id="96" class="Keyword">import</a> <a id="103" href="Data.String.Base.html" class="Module">Data.String.Base</a> <a id="120" class="Keyword">using</a> <a id="126" class="Symbol">(</a><a id="127" href="Agda.Builtin.String.html#165" class="Postulate">String</a><a id="133" class="Symbol">)</a> <a id="135" class="Keyword">public</a>
+
+<a id="143" class="Symbol">{-#</a> <a id="147" class="Keyword">FOREIGN</a> GHC import qualified Data.Text <a id="186" class="Symbol">#-}</a>
+<a id="190" class="Symbol">{-#</a> <a id="194" class="Keyword">FOREIGN</a> GHC import qualified System.Environment <a id="242" class="Symbol">#-}</a>
+
+
+<a id="248" class="Keyword">postulate</a>
+  <a id="NativeIO"></a><a id="260" href="NativeIO.html#260" class="Postulate">NativeIO</a>     <a id="273" class="Symbol">:</a> <a id="275" class="PrimitiveType">Set</a> <a id="279" class="Symbol">→</a> <a id="281" class="PrimitiveType">Set</a>
+  <a id="nativeReturn"></a><a id="287" href="NativeIO.html#287" class="Postulate">nativeReturn</a> <a id="300" class="Symbol">:</a> <a id="302" class="Symbol">{</a><a id="303" href="NativeIO.html#303" class="Bound">A</a> <a id="305" class="Symbol">:</a> <a id="307" class="PrimitiveType">Set</a><a id="310" class="Symbol">}</a> <a id="312" class="Symbol">→</a> <a id="314" href="NativeIO.html#303" class="Bound">A</a> <a id="316" class="Symbol">→</a> <a id="318" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="327" href="NativeIO.html#303" class="Bound">A</a>
+  <a id="_native&gt;&gt;=_"></a><a id="331" href="NativeIO.html#331" class="Postulate Operator">_native&gt;&gt;=_</a>  <a id="344" class="Symbol">:</a> <a id="346" class="Symbol">{</a><a id="347" href="NativeIO.html#347" class="Bound">A</a> <a id="349" href="NativeIO.html#349" class="Bound">B</a> <a id="351" class="Symbol">:</a> <a id="353" class="PrimitiveType">Set</a><a id="356" class="Symbol">}</a> <a id="358" class="Symbol">→</a> <a id="360" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="369" href="NativeIO.html#347" class="Bound">A</a> <a id="371" class="Symbol">→</a> <a id="373" class="Symbol">(</a><a id="374" href="NativeIO.html#347" class="Bound">A</a> <a id="376" class="Symbol">→</a> <a id="378" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="387" href="NativeIO.html#349" class="Bound">B</a><a id="388" class="Symbol">)</a> <a id="390" class="Symbol">→</a> <a id="392" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="401" href="NativeIO.html#349" class="Bound">B</a>
+  <a id="_native&gt;&gt;_"></a><a id="405" href="NativeIO.html#405" class="Postulate Operator">_native&gt;&gt;_</a>  <a id="417" class="Symbol">:</a> <a id="419" class="Symbol">{</a><a id="420" href="NativeIO.html#420" class="Bound">A</a> <a id="422" href="NativeIO.html#422" class="Bound">B</a> <a id="424" class="Symbol">:</a> <a id="426" class="PrimitiveType">Set</a><a id="429" class="Symbol">}</a> <a id="431" class="Symbol">→</a> <a id="433" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="442" href="NativeIO.html#420" class="Bound">A</a> <a id="444" class="Symbol">→</a> <a id="446" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="455" href="NativeIO.html#422" class="Bound">B</a> <a id="457" class="Symbol">→</a> <a id="459" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="468" href="NativeIO.html#422" class="Bound">B</a>
+
+
+<a id="472" class="Symbol">{-#</a> <a id="476" class="Keyword">BUILTIN</a> IO <a id="487" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="496" class="Symbol">#-}</a>
+<a id="500" class="Symbol">{-#</a> <a id="504" class="Keyword">COMPILE</a> GHC <a id="516" href="NativeIO.html#260" class="Postulate">NativeIO</a> = type IO <a id="535" class="Symbol">#-}</a>
+<a id="539" class="Symbol">{-#</a> <a id="543" class="Keyword">COMPILE</a> GHC <a id="555" href="NativeIO.html#287" class="Postulate">nativeReturn</a> = (\_ -&gt; return :: a -&gt; IO a) <a id="598" class="Symbol">#-}</a>
+<a id="602" class="Symbol">{-#</a> <a id="606" class="Keyword">COMPILE</a> GHC <a id="618" href="NativeIO.html#331" class="Postulate Operator">_native&gt;&gt;=_</a> = (\_ _ -&gt; (&gt;&gt;=) :: IO a -&gt; (a -&gt; IO b) -&gt; IO b) <a id="679" class="Symbol">#-}</a>
+<a id="683" class="Symbol">{-#</a> <a id="687" class="Keyword">COMPILE</a> GHC <a id="699" href="NativeIO.html#405" class="Postulate Operator">_native&gt;&gt;_</a>  = (\_ _ -&gt; (&gt;&gt;) :: IO a -&gt; IO b -&gt; IO b) <a id="752" class="Symbol">#-}</a>
+
+
+
+
+<a id="760" class="Keyword">postulate</a>
+  <a id="nativeGetLine"></a><a id="772" href="NativeIO.html#772" class="Postulate">nativeGetLine</a>   <a id="788" class="Symbol">:</a> <a id="790" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="799" href="Agda.Builtin.String.html#165" class="Postulate">String</a>
+  <a id="nativePutStrLn"></a><a id="808" href="NativeIO.html#808" class="Postulate">nativePutStrLn</a>  <a id="824" class="Symbol">:</a> <a id="826" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="833" class="Symbol">→</a> <a id="835" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="844" href="Unit.html#28" class="Record">Unit</a>
+
+<a id="850" class="Symbol">{-#</a> <a id="854" class="Keyword">COMPILE</a> GHC <a id="866" href="NativeIO.html#808" class="Postulate">nativePutStrLn</a> = (\ s -&gt; putStrLn (Data.Text.unpack s)) <a id="922" class="Symbol">#-}</a>
+<a id="926" class="Symbol">{-#</a> <a id="930" class="Keyword">COMPILE</a> GHC <a id="942" href="NativeIO.html#772" class="Postulate">nativeGetLine</a> = (fmap Data.Text.pack getLine) <a id="988" class="Symbol">#-}</a>
+
+
+<a id="994" class="Keyword">postulate</a>
+  <a id="getArgs"></a><a id="1006" href="NativeIO.html#1006" class="Postulate">getArgs</a> <a id="1014" class="Symbol">:</a> <a id="1016" href="NativeIO.html#260" class="Postulate">NativeIO</a> <a id="1025" class="Symbol">(</a><a id="1026" href="Agda.Builtin.List.html#80" class="Datatype">List</a> <a id="1031" href="Agda.Builtin.String.html#165" class="Postulate">String</a><a id="1037" class="Symbol">)</a>
+  <a id="primShowNat"></a><a id="1041" href="NativeIO.html#1041" class="Postulate">primShowNat</a> <a id="1053" class="Symbol">:</a> <a id="1055" href="Agda.Builtin.Nat.html#97" class="Datatype">ℕ</a> <a id="1057" class="Symbol">→</a> <a id="1059" href="Agda.Builtin.String.html#165" class="Postulate">String</a>
+
+<a id="1067" class="Symbol">{-#</a> <a id="1071" class="Keyword">COMPILE</a> GHC <a id="1083" href="NativeIO.html#1041" class="Postulate">primShowNat</a> = Data.Text.pack . show <a id="1119" class="Symbol">#-}</a>
+
+<a id="1124" class="Symbol">{-#</a> <a id="1128" class="Keyword">COMPILE</a> GHC <a id="1140" href="NativeIO.html#1006" class="Postulate">getArgs</a> =     fmap (map Data.Text.pack) System.Environment.getArgs <a id="1207" class="Symbol">#-}</a>
+
+
+
+<a id="1214" class="Comment">--</a>
+<a id="1217" class="Comment">-- Debug function</a>
+<a id="1235" class="Comment">--</a>
+<a id="1238" class="Symbol">{-#</a> <a id="1242" class="Keyword">FOREIGN</a> GHC import qualified Debug.Trace as Trace <a id="1292" class="Symbol">#-}</a>
+
+<a id="1297" class="Symbol">{-#</a> <a id="1301" class="Keyword">FOREIGN</a> GHC
+
+debug = flip Trace.trace
+
+debug&#39; :: c -&gt; Data.Text.Text -&gt; c
+debug&#39; c txt = debug c (Data.Text.unpack txt)
+
+<a id="1422" class="Symbol">#-}</a>
+
+<a id="1427" class="Keyword">postulate</a> <a id="debug"></a><a id="1437" href="NativeIO.html#1437" class="Postulate">debug</a> <a id="1443" class="Symbol">:</a> <a id="1445" class="Symbol">{</a><a id="1446" href="NativeIO.html#1446" class="Bound">A</a> <a id="1448" class="Symbol">:</a> <a id="1450" class="PrimitiveType">Set</a><a id="1453" class="Symbol">}</a> <a id="1455" class="Symbol">→</a>  <a id="1458" href="NativeIO.html#1446" class="Bound">A</a> <a id="1460" class="Symbol">→</a> <a id="1462" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="1469" class="Symbol">→</a> <a id="1471" href="NativeIO.html#1446" class="Bound">A</a>
+<a id="1473" class="Comment">--debug {A} a s = a</a>
+<a id="1493" class="Symbol">{-#</a> <a id="1497" class="Keyword">COMPILE</a> GHC <a id="1509" href="NativeIO.html#1437" class="Postulate">debug</a> = (\x -&gt; debug&#39;) <a id="1532" class="Symbol">#-}</a>
+
+<a id="1537" class="Keyword">postulate</a> <a id="debug₁"></a><a id="1547" href="NativeIO.html#1547" class="Postulate">debug₁</a> <a id="1554" class="Symbol">:</a> <a id="1556" class="Symbol">{</a><a id="1557" href="NativeIO.html#1557" class="Bound">A</a> <a id="1559" class="Symbol">:</a> <a id="1561" class="PrimitiveType">Set₁</a><a id="1565" class="Symbol">}</a> <a id="1567" class="Symbol">→</a>  <a id="1570" href="NativeIO.html#1557" class="Bound">A</a> <a id="1572" class="Symbol">→</a> <a id="1574" href="Agda.Builtin.String.html#165" class="Postulate">String</a> <a id="1581" class="Symbol">→</a> <a id="1583" href="NativeIO.html#1557" class="Bound">A</a>
+<a id="1585" class="Comment">-- debug₁ {A} a s = a</a>
+<a id="1607" class="Symbol">{-#</a> <a id="1611" class="Keyword">COMPILE</a> GHC <a id="1623" href="NativeIO.html#1547" class="Postulate">debug₁</a> = (\x -&gt; debug&#39;) <a id="1647" class="Symbol">#-}</a>
+</pre></body></html>

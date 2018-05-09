@@ -1,0 +1,3 @@
+name: ioexamples
+depend: standard-library
+include: . ../src
