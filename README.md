@@ -11,5 +11,5 @@
   [LoadAllPPDP18.agda](/agda/examples/GUI/LoadAllPPDP18.agda)
 2. Html version of Agda code (no Agda installation needed)
   [html](/html/)
-3. The above files can be viewed with a Browser via the following link:
+3. *The above files can be viewed with a Browser via the following link:*
    [http://www.cs.swan.ac.uk/~csetzer/transfer/ppdp18Temporary8jqm7tRs/GUI.LoadAllPPDP18.html](http://www.cs.swan.ac.uk/~csetzer/transfer/ppdp18Temporary8jqm7tRs/GUI.LoadAllPPDP18.html)
