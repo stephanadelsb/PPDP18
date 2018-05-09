@@ -1,9 +1,8 @@
-# PPDP18
-# Due to the extension of the submission deadline, the access to our code will be available shortly.
 
-Code from the paper / Declarative GUIs: Simple, Consistent, and Verified
 
-# Files Used in the article submitted to PPDP18 by Stephan Adelsberger, Anton Setzer, and Eric Walkingshaw
+# Declarative GUIs: Simple, Consistent, and Verified
+
+## Files Used in the article submitted to PPDP18 by Stephan Adelsberger, Anton Setzer, and Eric Walkingshaw
 
 ## Code in Agda
 0. All Agda Code
