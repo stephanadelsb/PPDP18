@@ -1,3 +1,4 @@
+--@PREFIX@StateSizedBase
 module StateSizedIO.BaseNonPoly where
 
 -- this is a verison of the Base which is not polymorphic in
@@ -22,12 +23,14 @@ record IOInterfaceˢ  : Set₁ where
 open IOInterfaceˢ public
 
 
-record Interfaceˢ : Set₁ where 
- field 
+--@BEGIN@Stateinterface
+record Interfaceˢ : Set₁ where --@HIDE-BEG
+ field --@HIDE-END
   Stateˢ    :  Set
   Methodˢ   :  Stateˢ → Set
   Resultˢ   :  (s : Stateˢ) → (m : Methodˢ s) → Set
   nextˢ  :  (s : Stateˢ) → (m : Methodˢ s) → (Resultˢ s m) → Stateˢ
+--@END
 open Interfaceˢ public
 
 {-
@@ -37,7 +40,7 @@ module _
                                -- (let n = nextˢ objinf)
  where
  @BEGIN@IOObject
-  record IOObjectˢ (i : Size) (s : Stateˢ objinf) : Set where 
+  record IOObjectˢ (i : Size) (s : Stateˢ objinf) : Set where --@HIDE-BEG
     coinductive
     field
  HIDE-END
@@ -51,17 +54,22 @@ module _
 
 
 module _
+--@BEGIN@Interfaces
   (ioinf  : IOInterface)
   (oinf  :  Interfaceˢ)
+--@END
   where
+--@BEGIN@IOObject
  record IOObjectˢ (i : Size) (s : oinf .Stateˢ) : Set where
-  coinductive 
+  coinductive --@HIDE-BEG
   field
+--@HIDE-END
    method :
     ∀{j : Size< i}
      (m : oinf .Methodˢ s) →
      IO ioinf ∞ (Σ[  r ∈ oinf .Resultˢ s m ]
                      IOObjectˢ j (oinf .nextˢ s m r))
+--@END
 
 
 module _

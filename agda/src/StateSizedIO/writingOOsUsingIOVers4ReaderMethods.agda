@@ -1,3 +1,4 @@
+--@PREFIX@writingOOsUsingIOVersFourReaderMethods
 {-# OPTIONS --postfix-projections #-}
 -- {-# OPTIONS --allow-unsolved-metas #-}
 
@@ -129,9 +130,12 @@ module _ (I : IOInterfaceˢ )
   mutual
 
 -- \writingOOsUsingIOVersFourReaderMethodsIOind
+--@BEGIN@IOind
     data IOˢind (A : S → Set) (s : S) : Set where
+--@C
       execˢⁱ      :  (c : C s) (f : (r : R s c) → IOˢind A (n s c r)) → IOˢind A s
       returnˢⁱ  :  (a : A s) → IOˢind A s
+--@END
 
     IOˢindₚ : (A : Set)(s s' : S) → Set
     IOˢindₚ A s s' = IOˢind (λ s'' → (s'' ≡ s') × A) s
@@ -146,11 +150,13 @@ module _ {I : RInterfaceˢ } (let S = Stateˢ I) (let n = nextˢ I)
            where
 
 -- \writingOOsUsingIOVersFourReaderMethodstranslateIOind
+--@BEGIN@translateIOind
   translateˢ : {A : S → Set} (s : S) (obj : RObjectˢ I s) (p : IOˢind (objectInterfToIOInterfˢ I) A s)
                → Σ[ s′ ∈ S ]  (A s′ × RObjectˢ I s′)
   translateˢ s obj (returnˢⁱ x)       =  s , (x , obj)
   translateˢ s obj (execˢⁱ (inj₁ c) p)  = obj .objectMethod c ▹ λ {(x , o′) → translateˢ (n s c x) o′ (p x)  }
   translateˢ s obj (execˢⁱ (inj₂ c) p)  = obj .readerMethod c ▹ λ x → translateˢ s obj (p x)
+--@END
 -- obj .objectMethod c ▹ λ {(x , o′)
 --                                      → translateˢ {A} {n s c x} o′ (p x)  }
 
@@ -319,11 +325,17 @@ module _ (I₁ : IOInterfaceˢ{lzero} )
 
   mutual
 
-    record  IOˢindcoind (i : Size)(A : S₁ → S₂ → Set) (s₁ : S₁)(s₂ : S₂) : Set where 
+--@BEGIN@defIoindcoind
+    record  IOˢindcoind (i : Size)(A : S₁ → S₂ → Set) (s₁ : S₁)(s₂ : S₂) : Set where --@HIDE-BEG
       coinductive
       field
+--@HIDE-END
             forceIC : {j : Size< i} → IOˢindcoind+ j A s₁ s₂
 
+--@C     Note that in IOˢindcoind+
+--@C               execˢobj  refers in f to IOˢindcoind+
+--@C       whereas execˢIO   refers in f to IOˢindcoind
+--@C
     data IOˢindcoind+ (i : Size)(A : S₁ → S₂ → Set) (s₁ : S₁)(s₂ : S₂) : Set where
        execˢIO      :  (c₁ : C₁ s₁) (f : (r₁ : R₁ s₁ c₁) → IOˢindcoind i A (n₁ s₁ c₁ r₁) s₂)
                      → IOˢindcoind+ i A s₁ s₂
@@ -331,6 +343,7 @@ module _ (I₁ : IOInterfaceˢ{lzero} )
                      → IOˢindcoind+ i A s₁ s₂
        returnˢic  :  A s₁ s₂
                      → IOˢindcoind+ i A s₁ s₂
+--@END
 open IOˢindcoind public
 
 
@@ -485,6 +498,7 @@ module _ (I₁ : IOInterfaceˢ )
          (let S₂ = Stateˢ I₂)(let n₂ = nextˢ I₂′)
            where
   mutual
+--@BEGIN@translateIndCoindToIO
     translateˢIndCoind : ∀ {i A s₁ s₂} (obj : RObjectˢ I₂ s₂) (p : IOˢindcoind I₁ I₂′ i A s₁ s₂)
                        → IOˢ I₁ i (λ s₁ → Σ[ s₂ ∈ S₂ ] (A s₁ s₂ × RObjectˢ I₂ s₂)) s₁
     translateˢIndCoind obj p .forceˢ = translateˢIndCoind+ obj (p .forceIC)
@@ -498,6 +512,7 @@ module _ (I₁ : IOInterfaceˢ )
     translateˢIndCoind+ obj (execˢIO c₁ f) = execˢ' c₁ λ r₁ →
       translateˢIndCoind obj (f r₁)
     translateˢIndCoind+ {i} {A} {s₁} {s₂} obj (returnˢic a) = returnˢ' (s₂ , a , obj)
+--@END
 {-
     translateˢIndCoindShape : ∀{i} → {A : S₁ → S₂ → Set}{s₁ : S₁}{s₂ : S₂}
                  → RObjectˢ  I₂ s₂
@@ -767,8 +782,10 @@ module _ {objInf : RInterfaceˢ}
          (let objIOInf = objectInterfToIOInterfˢ objInf)
          {objState : objIOInf .Stateˢ }
            where
+--@BEGIN@defRunStratingWith
         run_startingWith_ :  IOˢindcoind ConsoleInterfaceˢ objIOInf ∞ (λ x y → Unit) unit objState
                              → RObjectˢ objInf objState → NativeIO Unit
+--@END@
         run prog startingWith obj = translateIOConsole
            (flatternIOˢ  consoleI (λ c → c) (λ r → r) (fmapˢ {i = ∞} (λ x y → unit) {unit}
                                     (translateˢIndCoind ConsoleInterfaceˢ objInf obj prog)))

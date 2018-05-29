@@ -1,3 +1,4 @@
+--@PREFIX@StateSizedRObject
 
 module StateSizedIO.RObject where
 
@@ -17,6 +18,7 @@ open Interfaceˢ public
 -}
 
 --\StateSizedRObjectRInterface
+--@BEGIN@RInterface
 record RInterfaceˢ : Set₁ where
   field
     Stateˢ    :  Set
@@ -25,6 +27,7 @@ record RInterfaceˢ : Set₁ where
     nextˢ     :  (s : Stateˢ) → (m : Methodˢ s) → (r : Resultˢ s m) → Stateˢ
     RMethodˢ  :  (s : Stateˢ) → Set
     RResultˢ  :  (s : Stateˢ) → (m : RMethodˢ s) → Set
+--@END
 
 open RInterfaceˢ public
 
@@ -38,11 +41,14 @@ module _ (I : RInterfaceˢ)(let S = Stateˢ I) (let M = Methodˢ I)
   -- A simple object just returns for a method the response
   -- and the object itself
 --\StateSizedRObjectRObject
+--@BEGIN@RObject
   record RObjectˢ (s : S) : Set where
-    coinductive 
+    coinductive --@HIDE-BEG
     field
+--@HIDE-END
       objectMethod  :  (m : M s) → Σ[ r ∈ R s m ] RObjectˢ (next s m r)
       readerMethod  :  (m : RM s) → RR s m
+--@END
   open RObjectˢ public
 
 

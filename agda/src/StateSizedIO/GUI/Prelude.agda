@@ -1,3 +1,4 @@
+--@PREFIX@WxGraphicsLibLevelThree
 --{-# OPTIONS --allow-unsolved-metas #-}
 
 module StateSizedIO.GUI.Prelude where

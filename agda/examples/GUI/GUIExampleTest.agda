@@ -1,3 +1,4 @@
+--@PREFIX@GUIExample
 open import Data.Bool
 
 module GUI.GUIExampleTest   where
@@ -49,6 +50,7 @@ mutual
 
  obj3Btn .method (suc (suc (suc ())) , _)
 
+--@BEGIN@ObjTwoBtn
  obj2Btn : ∀ {i} → FrameObj {i} twoBtnGUI
  obj2Btn .method (zero , _) = putStrLine ">>>>>>>>>>> zero button [NOT WORKING]" >>
                         return (twoBtnGUI , obj2Btn)
@@ -56,3 +58,4 @@ mutual
                               return (threeBtnGUI , obj3Btn)
  obj2Btn .method (suc (suc ()), _ )
 
+--@END

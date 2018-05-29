@@ -3,8 +3,11 @@
 ## 1) Agda installation
 (we are using '2.6.0-8cae647' but later versions should work)
 
-## 2)  Agda standard lib installation
+## 2a)  Agda standard lib installation
 (we are using version 55ad461aa4fc6cf22e97812b7ff8128b3c7a902c)
+
+## 2b)  be sure to set your 'agdalib' file correctly; see also:
+http://agda.readthedocs.io/en/v2.5.2/tools/package-system.html
 
 ## 3) Install hackage 'sdl2' library
 ##

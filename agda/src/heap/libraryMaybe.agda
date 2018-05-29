@@ -26,6 +26,10 @@ IsNothing : {A : Set} (a : Maybe A) →  Set
 IsNothing (just x) = ⊥
 IsNothing nothing = ⊤
 
+IsJust : {A : Set} (a : Maybe A) →  Set
+IsJust (just x) = ⊤
+IsJust nothing = ⊥
+
 NothingInductionLemma : ∀{A}(P : Maybe A → Set) → (a : Maybe A) -> IsNothing a → P nothing → P a
 NothingInductionLemma p (just x) ()
 NothingInductionLemma p nothing q q' = q'
@@ -48,3 +52,8 @@ maybeAcrossBtoMaybeAcrossB (nothing , _) = nothing
 maybeFunctor : {A B : Set} (f : A → B) (ma : Maybe A) → Maybe B
 maybeFunctor f (just x) = just (f x)
 maybeFunctor f nothing = nothing
+
+
+just2Value : {A : Set}{a : Maybe A}(p : IsJust a) → A
+just2Value {A} {just x} p = x
+just2Value {A} {nothing} ()

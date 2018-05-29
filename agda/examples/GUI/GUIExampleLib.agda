@@ -1,3 +1,4 @@
+--@PREFIX@GUIExampleLib
 module GUI.GUIExampleLib where
 
 open import Data.String
@@ -55,10 +56,12 @@ addButtonCmp : Button → Frame → Frame
 addButtonCmp bt fr = addCmp fr buttonIdx bt
 
 -- \GUIExampleLib
+--@BEGIN@FrameElements
 emptyFrame  :  Frame
 addButton   :  String → Frame → Frame
 addLabel    :  String → Frame → Frame
 addTextbox  :  Frame → Frame
+--@END
 
 
 addButton str fr = addCmp fr buttonIdx (createButton str)
@@ -84,9 +87,9 @@ onebuttonStrGUI str f .obj .method m = returnGUI f
 
 
 
-terminateGUI : String → GUI {∞}
-terminateGUI str .gui = addLabel str emptyFrame
-terminateGUI str .obj .method ()
+endEventGUI : String → GUI {∞}
+endEventGUI str .gui = addLabel str emptyFrame
+endEventGUI str .obj .method ()
 
 xorGUI : List (String × GUI {∞}) → GUI {∞}
 xorGUI [] .gui = emptyFrame
@@ -125,7 +128,7 @@ multiTextboxHandler : {i : Size}(n k : ℕ) (v : Tuple String n)
                       → FrameObj {↑ i} (multiTextboxFrame n v)
 multiTextboxHandler 0 k v f v' .method (() , _)
 multiTextboxHandler 1 k v f v' .method ( _ ,  str ) .force =
-   exec' (putStrLn "Handler is aktivated >>") λ _ → returnGUI (f  str v' )
+   exec' (putStrLn "Handler is activated >>") λ _ → returnGUI (f  str v' )
    --returnGUI (f  str v' )
 multiTextboxHandler (suc (suc n)) k (str , v) f v' .method ( l  , m) =
             multiTextboxHandler (suc n) (suc k) v

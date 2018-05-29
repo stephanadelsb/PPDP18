@@ -1,7 +1,9 @@
+--@PREFIX@BusinessProcessMedExVersThreeParttwo
 -- \BusinessProcess
 
 module GUI.BusinessProcessMedExVers3Part2  where
 
+-- More advanced properties verified for BusinessProcessVers3.agda
 
 open import StateSizedIO.GUI.BaseStateDependent
 open import StateSizedIO.writingOOsUsingIOVers4ReaderMethods hiding (nˢ) renaming(execˢⁱ to execᵢ ; returnˢⁱ to returnᵢ)
@@ -45,6 +47,7 @@ lowdoseSelectionState = businessModel2State lowdoseSelection
 
 
 --\BusinessProcessParttwo
+--@BEGIN@theoremNoLowDosisauxthirty
 theoremNoLowDosis<30aux : (f : FallRisk)(r : RenalCat) (a : AgeCat)(w : WghtCat)
                       → r ≡ ≥25<30
                       → (r' : RenalCat≥30)
@@ -53,6 +56,7 @@ theoremNoLowDosis<30aux : (f : FallRisk)(r : RenalCat) (a : AgeCat)(w : WghtCat)
                       → {s : State}
                       →  NOACSelectionDState r' a' -gui-> s
                       → ¬ (s  ≡ lowdoseSelectionState)
+--@END
 theoremNoLowDosis<30aux f .≥25<30 a w refl r' a' x₁ refl-gui-> ()
 theoremNoLowDosis<30aux fallRisk .≥25<30 <75 ≤60 refl ≥30<50 <75 (step c₁ (step c₂ (step c₃ (step (() , proj₄) x₁)))) (step c refl-gui->) refl
 theoremNoLowDosis<30aux noFallRisk .≥25<30 <75 ≤60 refl ≥30<50 <75 (step c₁ (step c₂ (step c₃ (step c₄ (step (() , proj₄) x₁))))) (step c refl-gui->) refl
@@ -91,7 +95,20 @@ theoremNoLowDosis<30aux fallRisk .≥25<30 a >60 refl r' a' (step c₃ (step c�
 theoremNoLowDosis<30aux fallRisk .≥25<30 a >60 refl r' a' (step c₃ (step c₄ (step c₇ (step (() , proj₄) x₁)))) (step c (step c₁ (step c₂ (step c₅ (step c₆ (step c₉ (step c₁₀ x₂))))))) x₃
 theoremNoLowDosis<30aux noFallRisk .≥25<30 a >60 refl r' a' (step c₃ (step c₄ (step c₇ (step c₈ (step (() , proj₄) x₁))))) (step c (step c₁ (step c₂ (step c₅ (step c₆ x₂))))) x₃
 
+{-
+theoremNoLowDosis<30auxUsingAuto : (f : FallRisk)(r : RenalCat) (a : AgeCat)(w : WghtCat)
+                      → r ≡ ≥25<30
+                      → (r' : RenalCat≥30)
+                      → (a' : AgeCat)
+                      → diagnosisState f r a w -gui-> NOACSelectionDState r' a'
+                      → {s : State}
+                      →  NOACSelectionDState r' a' -gui-> s
+                      → ¬ (s  ≡ lowdoseSelectionState)
+theoremNoLowDosis<30auxUsingAuto f r a w rproof r' a' path path2 s≡  = {!!}
+-}
+
 --\BusinessProcessParttwo
+--@BEGIN@theoremNoLowDosisthirty
 theoremNoLowDosis<30 :
    (strAge strWght strFallR strScore strBlood : String)
    →  str2RenalCat strBlood  ≡ ≥25<30
@@ -103,6 +120,7 @@ theoremNoLowDosis<30 :
    →  {s : State}
    →  NOACSelectionDState r' a' -gui-> s
    →  ¬ (s  ≡ lowdoseSelectionState)
+--@END
 theoremNoLowDosis<30 strAge strWght strFallR strScore strBlood =
        theoremNoLowDosis<30aux
             (patientHist2FallRisk strFallR)

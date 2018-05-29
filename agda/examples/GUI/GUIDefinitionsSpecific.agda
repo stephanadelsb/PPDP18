@@ -1,4 +1,9 @@
+--@PREFIX@GUIDefinitions
 module GUI.GUIDefinitionsSpecific where
+
+-- Variant of GUIDefinitions
+--  where names are simplifed for the PPDP18 paper
+--  omitting GUI as a prefix
 
 open import Data.String
 open import Data.List
@@ -83,7 +88,9 @@ module _  (cmpStruc : CompStruc)(c : Components cmpStruc) where
   nextGUI g m r = r
 
 --\GUIDefinitions
+--@BEGIN@GUIInterface
   GUIInterface : Interfaceˢ
+--@END
   GUIInterface .Stateˢ  = GUIState
   GUIInterface .Methodˢ = GUIElMethod
   GUIInterface .Resultˢ = GUIElResult
@@ -124,11 +131,13 @@ FrameMethod  = GUIElMethod frameCmpStruc frame
 -- we have here a specialised version so that it is easier to presentx
 
 -- \GUIDefinitions
-record GUI : Set where 
+--@BEGIN@FrameGUI
+record GUI : Set where --@HIDE-BEG
   constructor guic
-  field 
+  field --@HIDE-END
     gui : Frame
     obj : FrameObj gui
+--@END
 
 open GUI public
 

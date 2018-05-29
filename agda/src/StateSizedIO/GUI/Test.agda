@@ -1,3 +1,4 @@
+--@PREFIX@Test
 --{-# OPTIONS --allow-unsolved-metas #-}
 
 module StateSizedIO.GUI.Test where

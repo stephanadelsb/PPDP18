@@ -1,3 +1,4 @@
+--@PREFIX@BusinessProcessMedExVersThreeCompiled
 module GUI.BusinessProcessMedExVers3Compiled  where
 
 
@@ -10,7 +11,9 @@ open import NativeIO renaming (NativeIO to IO;
                                _native>>=_ to _>>=_;
                                _native>>_ to _>>_)
 
+--@BEGIN@main
 main : IO Unit
 main = do
   win <- createWindowFFI
   compile win patientRegistrationGUI
+--@END

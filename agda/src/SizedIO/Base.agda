@@ -1,3 +1,4 @@
+--@PREFIX@SizedIOBase
 
 module SizedIO.Base where
 
@@ -13,10 +14,12 @@ open import SizedIO.Object
 open import NativeIO
 open import Data.Product
 
-record IOInterface  : Set₁ where 
-  field 
+--@BEGIN@IOInterface
+record IOInterface  : Set₁ where --@HIDE-BEG
+  field --@HIDE-END
     Command   : Set
     Response  : Command → Set
+--@END
 open IOInterface public
 
 module _ (I : IOInterface ) (let C = Command I) (let R = Response I) where

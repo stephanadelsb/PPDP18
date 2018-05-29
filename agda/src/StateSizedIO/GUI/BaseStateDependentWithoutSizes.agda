@@ -1,3 +1,4 @@
+--@PREFIX@StateSizedBase
 
 module StateSizedIO.GUI.BaseStateDependentWithoutSizes where
 -- This file should go to StateSizedIO.BaseStateDependent
@@ -23,13 +24,15 @@ record IOInterfaceˢ : Set₁ where
     nextˢ     : (s : Stateˢ) → (c : Commandˢ s) → Responseˢ s c → Stateˢ
 open IOInterfaceˢ public
 
-record Interfaceˢ  : Set₁  where 
- field 
+--@BEGIN@Stateinterface
+record Interfaceˢ  : Set₁  where --@HIDE-BEG
+ field --@HIDE-END
   Stateˢ   :  Set
   Methodˢ  :  Stateˢ → Set
   Resultˢ  :  (s : Stateˢ)  →  Methodˢ s → Set
   nextˢ    :  (s : Stateˢ)  (m : Methodˢ s) → Resultˢ s m
               → Stateˢ
+--@END
 open Interfaceˢ public
 
 

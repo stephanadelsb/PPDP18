@@ -1,3 +1,4 @@
+--@PREFIX@StateSizedBase
 
 module StateSizedIO.GUI.BaseStateDependent where
 -- This file should go to StateSizedIO.BaseStateDependent
@@ -21,13 +22,15 @@ record IOInterfaceˢ {γ ρ μ} : Set (lsuc (γ ⊔ ρ ⊔ μ )) where
     nextˢ     : (s : Stateˢ) → (c : Commandˢ s) → Responseˢ s c → Stateˢ
 open IOInterfaceˢ public
 
-record Interfaceˢ {γ ρ μ} : Set (lsuc (γ ⊔ ρ ⊔ μ )) where 
- field 
+--@BEGIN@Stateinterface
+record Interfaceˢ {γ ρ μ} : Set (lsuc (γ ⊔ ρ ⊔ μ )) where --@HIDE-BEG
+ field --@HIDE-END
   Stateˢ   :  Set γ
   Methodˢ  :  Stateˢ → Set ρ
   Resultˢ  :  (s : Stateˢ) → (m : Methodˢ s) → Set μ
   nextˢ    :  (s : Stateˢ) → (m : Methodˢ s) → (Resultˢ s m)
               → Stateˢ
+--@END
 open Interfaceˢ public
 
 
@@ -191,17 +194,22 @@ module _  {γ ρ}{I   : IOInterfaceˢ {γ} {ρ} {lzero}}
 
 module _
 --  {γ ρ μ : Level}
+--@BEGIN@Interfaces
   (ioinf  : IOInterface)
   (oinf  :  Interfaceˢ {lzero} {lzero} {lzero})
+--@END
   where
+--@BEGIN@IOObject
  record IOObjectˢ (i : Size) (s : oinf .Stateˢ) : Set where
-  coinductive 
+  coinductive --@HIDE-BEG
   field
+--@HIDE-END
    method :
     ∀{j : Size< i}
      (m : oinf .Methodˢ s) →
      IO ioinf ∞ (Σ[  r ∈ oinf .Resultˢ s m ]
                      IOObjectˢ j (oinf .nextˢ s m r))
+--@END
 
 module _
   (ioi   : IOInterface) (let C  = Command ioi)  (let R   = Response ioi)

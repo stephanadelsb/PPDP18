@@ -1,3 +1,4 @@
+--@PREFIX@GUICompilation
 {-# OPTIONS --allow-unsolved-metas #-}
 
 module GUI.GUICompilation where
@@ -94,7 +95,9 @@ mutual
 
   {-# NON_TERMINATING #-}
 -- \GUICompilation
+--@BEGIN@compile
   compile : SDLWindow → GUI → NativeIO Unit
+--@END
   compile win (guic gui obj) =
          nativePutStrLn "beginning of compile function" >>= λ _ →
          renderFrameToScreenFFI win gui >>= λ _ →

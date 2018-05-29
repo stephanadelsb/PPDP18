@@ -1,3 +1,4 @@
+--@PREFIX@GUIDefinitionsBase
 module GUI.GUIDefinitionsBase where
 
 open import Data.Unit
@@ -7,8 +8,9 @@ open import Data.String.Base
 
 
 --\GUIDefinitionsBase
-record CompStruc : Set₁ where 
-  field 
+--@BEGIN@CompStruc
+record CompStruc : Set₁ where --@HIDE-BEG
+  field --@HIDE-END
     Components     :  Set
     Properties     :  Components → Set
     SubCompIndex   :  Components → Set
@@ -16,11 +18,14 @@ record CompStruc : Set₁ where
                       → Components
     hasMethod      :  Components → Bool
     returnsStr     :  Components → Bool
+--@END
 open CompStruc public
 
 --\GUIDefinitionsBase
+--@BEGIN@FrameCmpts
 data FrameCmpts : Set where
   frame button label textbox : FrameCmpts
+--@END
 
 
 data FrameSubCmptIndex : Set where
@@ -55,7 +60,9 @@ frameCmpIsTxtBox _       = false
 
 
 --\GUIDefinitionsBase
+--@BEGIN@frameCmpStruc
 frameCmpStruc : CompStruc
+--@END
 Components   frameCmpStruc = FrameCmpts
 SubCompIndex frameCmpStruc = FrameSubCmpIdx
 subComp      frameCmpStruc = frameSubCmpIdx2Cmpt
@@ -73,3 +80,4 @@ data GUIel (cmpStruc : CompStruc)
               → (i : SubCompIndex cmpStruc c)
               → GUIel cmpStruc (subComp cmpStruc c i)
               → GUIel cmpStruc c
+--@END

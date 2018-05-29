@@ -1,7 +1,9 @@
+--@PREFIX@BusinessProcessMedExVersFour
 -- \BusinessProcessMedExVersFour
-
 module GUI.BusinessProcessMedExVers4   where
 
+-- Version creating GUIs which check the inputs and if are not valid
+--   goes back.
 
 open import StateSizedIO.GUI.BaseStateDependent
 open import StateSizedIO.writingOOsUsingIOVers4ReaderMethods hiding (nˢ) renaming(execˢⁱ to execᵢ ; returnˢⁱ to returnᵢ)
@@ -37,49 +39,61 @@ open import heap.libraryMaybe
 open import heap.libraryNatPart2
 
 
-discharge : BusinessModel
-lowdoseSelection  : BusinessModel
-highdoseSelection  : BusinessModel
+discharge : BusinessProcess
+lowdoseSelection  : BusinessProcess
+highdoseSelection  : BusinessProcess
 
 -- \BusinessProcess
-discharge          =  terminate "Discharge Patient"
-lowdoseSelection   =  simple "Low Dose"   discharge
-highdoseSelection  =  simple "High Dose"  discharge
+--@BEGIN@examplesBusinessmodel
+discharge          =  endEvent "Discharge Patient"
+lowdoseSelection   =  activity "Low Dose"   discharge
+highdoseSelection  =  activity "High Dose"  discharge
+--@END
 
 -- \BusinessProcess
-doseSelectionA : WghtCat → BusinessModel
+--@BEGIN@doseSelection
+doseSelectionA : WghtCat → BusinessProcess
 doseSelectionA ≤60 = lowdoseSelection
 doseSelectionA >60 = highdoseSelection
+--@END
 
 -- \BusinessProcess
+--@BEGIN@doseSelectionNotA
 doseSelection¬A :  RenalCat≥30  →  AgeCat
-                   → BusinessModel
+                   → BusinessProcess
 doseSelection¬A  ≥30<50  <75  =  lowdoseSelection
 doseSelection¬A  ≥50     <75  =  highdoseSelection
 doseSelection¬A  r       ≥75  =  lowdoseSelection
+--@END
 
 -- Note above that RenalCat is always ≥30 (use of type RenalCat≥30)
 
 -- \BusinessProcess
-NOACSelectionA : WghtCat → BusinessModel
-NOACSelectionA w = simple "Med A" (doseSelectionA w)
+--@BEGIN@NOACSelectionA
+NOACSelectionA : WghtCat → BusinessProcess
+NOACSelectionA w = activity "Med A" (doseSelectionA w)
+--@END
 
-NOACSelectionD : RenalCat≥30 →  AgeCat → BusinessModel
-NOACSelectionD r a = simple "Med D" (doseSelection¬A r a)
+--@BEGIN@NOACSelectionD
+NOACSelectionD : RenalCat≥30 →  AgeCat → BusinessProcess
+NOACSelectionD r a = activity "Med D" (doseSelection¬A r a)
+--@END
 
 -- \BusinessProcess
-NOACSelectionAll : RenalCat≥30 →  AgeCat →  WghtCat → BusinessModel
+--@BEGIN@NOACSelectionAll
+NOACSelectionAll : RenalCat≥30 →  AgeCat →  WghtCat → BusinessProcess
 NOACSelectionAll r a w = xor (("Med A" , doseSelectionA   w) ∷
                               ("Med D" , doseSelection¬A  r a) ∷
                               [])
+--@END
 
 
-warfarin : BusinessModel
-warfarin  = simple "Prescribe warfarin"  discharge
+warfarin : BusinessProcess
+warfarin  = activity "Prescribe warfarin"  discharge
 
 
 
-medicationSelection : FallRisk → RenalCat → AgeCat → WghtCat → BusinessModel
+medicationSelection : FallRisk → RenalCat → AgeCat → WghtCat → BusinessProcess
 medicationSelection _          <25 _    _ = warfarin
 medicationSelection fallRisk   ≥25<30 a w = warfarin
 medicationSelection fallRisk   ≥30<50 a w = NOACSelectionD   ≥30<50 a
@@ -89,37 +103,39 @@ medicationSelection noFallRisk ≥30<50 a w = NOACSelectionAll ≥30<50 a w
 medicationSelection noFallRisk ≥50    a w = NOACSelectionAll ≥50    a w
 
 
-mdChoice : FallRisk → RenalCat → AgeCat → WghtCat → BusinessModel
-mdChoice  f r a w = simple "MD Choice"
+mdChoice : FallRisk → RenalCat → AgeCat → WghtCat → BusinessProcess
+mdChoice  f r a w = activity "MD Choice"
                      (medicationSelection f r a w)
 
-diagnosis : FallRisk → RenalCat → AgeCat → WghtCat → BusinessModel
-diagnosis f r a w =  simple "Diagnosis"
-                    (simple "MD Choice"
+diagnosis : FallRisk → RenalCat → AgeCat → WghtCat → BusinessProcess
+diagnosis f r a w =  activity "Diagnosis"
+                    (activity "MD Choice"
                     (medicationSelection f r a w))
 
 bloodTestCheck : String → Maybe String
-bloodTestCheck = (strAsNum2ErrorMsgWoutRange "Please enter a number")
+bloodTestCheck = (strAsNum2ErrorMsgWoutRange "enter number!")
 
 -- \BusinessProcess
+--@BEGIN@bloodTestRes
 bloodTestRes :  FallRisk → AgeCat → WghtCat
-                → BusinessModel
+                → BusinessProcess
 bloodTestRes f a w =
     input "Enter Bloodtest Result" bloodTestCheck  λ str  →
     diagnosis f (str2RenalCat str ) a w
+--@END
 
-drawBlood : FallRisk → AgeCat → WghtCat → BusinessModel
-drawBlood f a w = simple "Draw Blood" (bloodTestRes f a w)
+drawBlood : FallRisk → AgeCat → WghtCat → BusinessProcess
+drawBlood f a w = activity "Draw Blood" (bloodTestRes f a w)
 
 fallRiskCHA2DS2Checkaux : Bool → Maybe String
-fallRiskCHA2DS2Checkaux false = just "Please enter true or false for fall/accident risk"
+fallRiskCHA2DS2Checkaux false = just "enter true or false"
 fallRiskCHA2DS2Checkaux true = nothing
 
 fallRiskCHA2DS2Check : Tuple String 2 → Maybe String
 fallRiskCHA2DS2Check (str , str') = fallRiskCHA2DS2Checkaux
                                        (primStringEquality str "true" ∨ primStringEquality str "false")
 
-patientHistory : AgeCat → WghtCat → BusinessModel
+patientHistory : AgeCat → WghtCat → BusinessProcess
 patientHistory a w =  input {2}  ("Enter fall/accident risk",
                                 "Enter CHA2DS2-VASc-Score")
                                 fallRiskCHA2DS2Check
@@ -127,26 +143,32 @@ patientHistory a w =  input {2}  ("Enter fall/accident risk",
                       drawBlood (patientHist2FallRisk strFallR) a w}
 
 ageWeightCheck : Tuple String 2 → Maybe String
-ageWeightCheck = (strPairAsNum2ErrorMsgWoutRange "Please enter age as a number"
-                                                                "Please enter Weight as a number")
+ageWeightCheck = (strPairAsNum2ErrorMsgWoutRange "enter age as number"
+                                                                "Enter Weight as numb.")
 
 -- \BusinessProcess
-patientRegistration : BusinessModel
+--@BEGIN@patientRegistration
+patientRegistration : BusinessProcess
 patientRegistration = input {2} ("Enter patient age" , "Enter Wght")
                                 ageWeightCheck λ {(strAge , strWght)  →
                                      patientHistory (str2AgeCat strAge) (str2WghtCat strWght)}
+--@END
 
 -- \BusinessProcessMedExVersThree
+--@BEGIN@patientRegistrationGUI
 patientRegistrationGUI : GUI
 patientRegistrationGUI = businessModel2GUI patientRegistration
+--@END
 
 
 {- We define some states -}
 
 -- \BusinessProcess
-businessModel2State : BusinessModel → GuiState
+--@BEGIN@BusinessProcesstoState
+businessModel2State : BusinessProcess → GuiState
 businessModel2State b
     = state (businessModel2GUI b) notStarted
+--@END
 
 
 dischargeState : GuiState
@@ -264,6 +286,8 @@ drawBloodStateReached strAge strWght strFallR strScore fallRiskCHA2DS2Ok with fa
 drawBloodStateReached strAge strWght strFallR strScore () | just x
 ... | nothing = refl
 
+test = businessModel2GUI
+
 
 patientHistoryStateReached :
          (strAge strWght : String)
@@ -279,6 +303,7 @@ patientHistoryStateReached strAge strWght () | just x
 ... | nothing = refl
 
 -- \BusinessProcess
+--@BEGIN@stateAfterBloodTest
 stateAfterBloodTest :
     (strAge strWght strFallR strScore strBlood : String)
     (ageWeightOk : IsNothing (ageWeightCheck (strAge , strWght)))
@@ -302,6 +327,7 @@ stateAfterBloodTest  strAge strWght strFallR strScore strBlood
                                 (diagnosisState (patientHist2FallRisk strFallR)
                                    (str2RenalCat strBlood) (str2AgeCat strAge) (str2WghtCat strWght)) ,,,
                                     diagnosisStateReached strAge strWght strFallR strScore strBlood bloodOk)
+--@END
 
 
 
@@ -309,6 +335,7 @@ stateAfterBloodTest  strAge strWght strFallR strScore strBlood
    state where warfarin is prescribed -}
 
 -- \BusinessProcess
+--@BEGIN@theoremWarfarinAux
 theoremWarfarinAux :  (f : FallRisk)(r : RenalCat)
                       (a : AgeCat)(w : WghtCat)
                       →  r ≡ <25
@@ -316,9 +343,11 @@ theoremWarfarinAux :  (f : FallRisk)(r : RenalCat)
                          -eventually-> warfarinState
 theoremWarfarinAux r .<25 a w refl =
       next (λ _ → next (λ _ → hasReached))
+--@END
 
 
 -- \BusinessProcess
+--@BEGIN@theoremWarfarin
 theoremWarfarin :
      (strAge strWght strFallR strScore strBlood : String)
     (ageWeightOk : IsNothing (ageWeightCheck (strAge , strWght)))
@@ -333,6 +362,7 @@ theoremWarfarin strAge strWght strFallR strScore strBlood  ageWeightOk fallRiskC
     theoremWarfarinAux (patientHist2FallRisk strFallR)
     (str2RenalCat strBlood) (str2AgeCat strAge)
     (str2WghtCat strWght)
+--@END
 
 
 {- a weaker statement which says that we reach Warfarin state in 2 button clicks -}
@@ -360,12 +390,14 @@ theoremWarfarin' strAge strWght strFallR strScore strBlood  ageWeightOk fallRisk
 
 {- We show that if the renalvalue is <25, NOAC A state will not be reached -}
 -- \BusinessProcess
+--@BEGIN@theoremNoNOACAaux
 theoremNoNOACA<25Aux : (f : FallRisk)(r : RenalCat) (a : AgeCat)(w : WghtCat)
                       → r ≡ <25
                       → {s : GuiState}
                       → diagnosisState f r a w -gui-> s
                       → (w' : WghtCat)
                       → ¬ (s  ≡ NOACSelectionAState w')
+--@END
 theoremNoNOACA<25Aux f .<25 _ _ refl refl-gui-> _ ()
 theoremNoNOACA<25Aux f .<25 _ _ refl (step _ refl-gui->) _ ()
 theoremNoNOACA<25Aux f .<25 _ _ refl (step _ (step _ refl-gui->)) _ ()
@@ -374,6 +406,7 @@ theoremNoNOACA<25Aux f .<25 _ _ refl (step _ (step _ (step _ (step (() , _) _)))
 
 
 -- \BusinessProcess`
+--@BEGIN@theoremNoNOACA
 theoremNoNOACA<25 :
    (strAge strWght strFallR strScore strBlood : String)
    (ageWeightOk : IsNothing (ageWeightCheck (strAge , strWght)))
@@ -386,6 +419,7 @@ theoremNoNOACA<25 :
       -gui-> s
    →  (w' : WghtCat)
    →  ¬ (s  ≡ NOACSelectionAState w')
+--@END
 theoremNoNOACA<25 strAge strWght strFallR strScore strBlood ageWeightOk fallRiskCHA2DS2Ok bloodOk =
            theoremNoNOACA<25Aux (patientHist2FallRisk strFallR)
                                 (str2RenalCat strBlood) (str2AgeCat strAge)(str2WghtCat strWght)

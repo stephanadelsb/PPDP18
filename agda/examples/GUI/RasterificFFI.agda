@@ -1,3 +1,4 @@
+--@PREFIX@RasterificFFI
 module GUI.RasterificFFI where
 
 open import Data.String.Base
@@ -16,13 +17,14 @@ open import NativeIO renaming (NativeIO to IO;
 open import  GUI.GUIDefinitionsBase
 open import  GUI.GUIDefinitions
 
-{-# FOREIGN GHC import qualified DeclareGUI.MainGUI              as M #-}
-{-# FOREIGN GHC import qualified DeclareGUI.GUI                  as G #-}
+{-# FOREIGN GHC import qualified DeclareGUI.AgdaInterface        as AI #-}
 {-# FOREIGN GHC import qualified DeclareGUI.Definitions          as D #-}
 {-# FOREIGN GHC import qualified DeclareGUI.SDLLIB               as SDL #-}
-{-# FOREIGN GHC import qualified DeclareGUI.RenderEvents         as R #-}
 
 
+-- delete:
+--{-# FOREIGN GHC import qualified DeclareGUI.GUI                  as G #-}
+--{-# FOREIGN GHC import qualified DeclareGUI.RenderEvents         as R #-}
 
 
 
@@ -76,10 +78,10 @@ postulate
    getEventsFFIhs : SDLWindow → FFIComponents → IO NumAndStringList
 
 
-{-# COMPILE GHC NumAndStringList       = type M.NumAndStringList #-}
-{-# COMPILE GHC getNum                 = M.getNum #-}
-{-# COMPILE GHC getStringList          = M.getStringList #-}
-{-# COMPILE GHC getEventsFFIhs         = M.getEventsFFI #-}
+{-# COMPILE GHC NumAndStringList       = type AI.NumAndStringList #-}
+{-# COMPILE GHC getNum                 = AI.getNum #-}
+{-# COMPILE GHC getStringList          = AI.getStringList #-}
+{-# COMPILE GHC getEventsFFIhs         = AI.getEventsFFI #-}
 
 
 
@@ -97,44 +99,14 @@ postulate
   renderFrameToScreenFFIhs : SDLWindow → FFIComponents → IO Unit
 
 {-# COMPILE GHC createWindowFFI      = SDL.createWindow #-}
-{-# COMPILE GHC renderFrameToScreenFFIhs  = R.renderFrameToScreen #-}
+{-# COMPILE GHC renderFrameToScreenFFIhs  = AI.renderFrameToScreen #-}
 
 
 renderFrameToScreenFFI : SDLWindow → Frame → IO Unit
 renderFrameToScreenFFI win fr = renderFrameToScreenFFIhs win (frame2FFI fr)
 
 
-{-
-  getButtonClickedFFIhs : FFIComponents → IO (Maybe  ℕ)
-  --
 
-  --
-  showMaybe : Maybe  ℕ → IO Unit
-
--- OLD: delete this: getButtonClicked : IO (Maybe ℕ)
-
-
-
-
-
-{-# COMPILE GHC getButtonClickedFFIhs  = M.getButtonClickedFromFrame #-}
-{-# COMPILE GHC showMaybe  = (\x -> putStrLn $ show x) #-}
-
-
---
--- TODO: remember to only count the number of buttons
---       If I had used the 'length' of the frame list in past
---       then this length would be now wrong (!!)
---
-
-
-getButtonClickedFFI : Frame → IO (Maybe  ℕ)
-getButtonClickedFFI fr = getButtonClickedFFIhs (frame2FFI fr)
-
--- List string is the values of the Textboxes
---
-postulate getEventsFFIOld : Frame → IO (ℕ × (List String))
--}
 
 
 

@@ -1,3 +1,4 @@
+--@PREFIX@GUIExample
 open import Data.Bool
 
 module GUI.GUIExample   where
@@ -42,11 +43,13 @@ syntax putStrLine' s f = putStrLine s >> f
 
 
 mutual
+--@BEGIN@ObjTwoBtn
  obj2Btn : ∀ {i} → FrameObj {i} twoBtnFrame
  obj2Btn .method (zero , _ ) = putStrLine "OK! Redefining GUI." >>
                         return (oneBtnFrame , obj1Btn)
  obj2Btn .method (suc zero , _) = putStrLine "Cancel." >>
                               return (twoBtnFrame , obj2Btn)
+--@END
 
 
 
@@ -62,10 +65,12 @@ mutual
  obj2Btn .method (suc (suc ()) , _)
 
 
+--@BEGIN@ObjOneBtn
  obj1Btn : ∀ {i} → FrameObj {i} oneBtnFrame
  obj1Btn .method (zero , _ )  = putStrLine "OK! Redefining GUI." >>
                         return (twoBtnFrame , obj2Btn)
  obj1Btn .method (suc () , _)
+--@END
 
 
 
@@ -103,27 +108,27 @@ Margin  = ℕ
 HSpace  = ℕ
 VSpace  = ℕ
 
--
+---@BEGIN@OneColumnLayout
 oneColumnLayout : Cols × Margin × HSpace × VSpace
 oneColumnLayout = (1 , 10 , 2 , 2)
--
+---@END
 
 
 
--
+---@BEGIN@Black
 black : Color
--
+---@END
 black = rgb 0 0 0
 
--
+---@BEGIN@AttrOneBtn
 propOneBtn : properties oneBtnFrame
 propOneBtn = black , oneColumnLayout
--
+---@END
 
--
+---@BEGIN@AttrTwoBtn
 propTwoBtn : properties twoBtnFrame
 propTwoBtn = black , black , oneColumnLayout
--
+---@END
 -}
 
 {-
@@ -150,10 +155,10 @@ compileProg : ∀ (a : CompEls frame) (b : properties a)
              (c : {i : Size} → GUIObj {i} a) → NativeIO Unit
 compileProg = λ a b c →  compileProgram a b (c {∞})
 
--
+---@BEGIN@Main
 main : NativeIO Unit
 main = compileProg twoBtnFrame propTwoBtn obj2Btn
--
+---@END
 
 --old
 --main : NativeIO Unit

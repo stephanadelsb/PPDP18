@@ -1,5 +1,6 @@
 
 
+--@PREFIX@GUIExampleInfiniteBtnsAdvanced
 
 module GUI.GUIExampleInfiniteBtnsAdvanced   where
 
@@ -28,9 +29,11 @@ open import GUI.GUICompilation hiding (main)
 open import GUI.RasterificFFI
 
 -- \GUIExampleInfiniteBtnsAdvanced
+--@BEGIN@nFrame
 nFrame : (n : ℕ) →  Frame
 nFrame 0        =  emptyFrame
 nFrame (suc n)  =  addButton (show n) (nFrame n)
+--@END
 -- above n =  number of buttons
 
 -- todo, consider renaming to: convertℕToStr
@@ -45,11 +48,13 @@ nFrame (suc n)  =  addButton (show n) (nFrame n)
 --
 
 -- \GUIExampleInfiniteBtnsAdvanced
+--@BEGIN@infiniteBtns
 infiniteBtns :  ∀{i} → (n : ℕ) → GUI {i}
 infiniteBtns n  .gui = nFrame n
 infiniteBtns 0  .obj .method ()
 infiniteBtns (suc n) .obj .method (m , _)  =
   returnGUI (infiniteBtns (n + finToℕ  m))
+--@END
   where
     finToℕ = toℕ
 
@@ -79,6 +84,7 @@ infiniteBtns (suc n) .obj .method (m , _)  =
 
 -- remove (", _") ?
 -- \GUIExampleInfiniteBtnsAdvanced
+--@BEGIN@GUIExampleinfiniteBtns
 
 objn : ∀ {i} → (n : ℕ) → FrameObj {i} (nFrame n)
 objn 0 .method ()
@@ -95,7 +101,9 @@ main' = compileProgram (nFrame 1) (propn 1) (objn' 1)
 -}
 
 -- \GUIExampleInfiniteBtnsAdvanced
+--@BEGIN@main
 main : NativeIO Unit
 main = do  win <- createWindowFFI
            compile win (infiniteBtns 3)
+--@END
            nativePutStrLn "hello Agda"

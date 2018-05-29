@@ -240,5 +240,5 @@ chrList2NatNonMaybe : List Char → ℕ
 chrList2NatNonMaybe l = chrList2NatNonMaybeAux (reverse l)
 
 
-str2NatNonMaybe : String → ℕ
-str2NatNonMaybe str = chrList2NatNonMaybe (primStringToList str)
+str2ℕ : String → ℕ
+str2ℕ str = chrList2NatNonMaybe (primStringToList str)

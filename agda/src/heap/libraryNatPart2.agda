@@ -47,7 +47,7 @@ strAsNum2ErrorMsgInclRange :
 strAsNum2ErrorMsgInclRange errorMsgIfNotNum minVal maxVal errorMsgIfNotInRange str
    = strAsNum2ErrorMsgInclRangeaux
        (checkStrIsNum str)
-       (checkIsInRange (str2NatNonMaybe str) minVal maxVal)
+       (checkIsInRange (str2ℕ str) minVal maxVal)
        errorMsgIfNotNum errorMsgIfNotInRange
 
 
@@ -88,10 +88,10 @@ strPairAsNum2ErrorMsgInclRange errorMsgIf1stNotNum minVal1stNum maxVal1stNum
                              errorMsgIf2ndNumNotInRange (str , str' )
                              = strPairAsNum2ErrorMsgInclRangeaux
                                (checkStrIsNum str)
-                               (checkIsInRange (str2NatNonMaybe str) minVal1stNum maxVal1stNum)
+                               (checkIsInRange (str2ℕ str) minVal1stNum maxVal1stNum)
                                errorMsgIf1stNotNum errorMsgIf1stNumNotInRange
                                (checkStrIsNum str')
-                               (checkIsInRange (str2NatNonMaybe str') minVal2ndNum maxVal2ndNum)
+                               (checkIsInRange (str2ℕ str') minVal2ndNum maxVal2ndNum)
                                errorMsgIf2ndNotNum errorMsgIf2ndNumNotInRange
 
 

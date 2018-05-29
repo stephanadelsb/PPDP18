@@ -1,14 +1,11 @@
+--@PREFIX@GUIModelVersTwo
 
 module GUI.GUIModelVers2 where
 
--- open import GUIgeneric.Prelude renaming (inj₁ to secondButton; inj₂ to firstButton)
+-- Addition to GUIModel.agda of operator _>>>'_wproof_,,,_
+-- whicha allows to sequence commands together with a proof which state has been reached.
 
--- open import GUIgeneric.PreludeGUI renaming (WxColor to Color) hiding (IIOnterfaceˢ)
-
--- open import GUIgeneric.GUIDefinitions renaming (add to add'; add' to add) --; ComponentEls to Frame)
--- open import GUIgeneric.GUI
--- open import GUIgeneric.GUIExampleLib
--- open import GUIgeneric.GUIExample -- hiding (HandlerGUIObject)
+-- uses GUIDefinitions.agda
 
 open import StateSizedIO.GUI.BaseStateDependent
 open import StateSizedIO.writingOOsUsingIOVers4ReaderMethods hiding (nˢ) renaming(execˢⁱ to execᵢ ; returnˢⁱ to returnᵢ)
@@ -26,9 +23,9 @@ open import Data.String
 open import Data.Unit
 open import Data.Maybe
 open import Size
-open import Relation.Binary.PropositionalEquality.Core public
-open import Relation.Binary.PropositionalEquality hiding (setoid ; preorder ; decSetoid; [_]) public
-open import Data.Sum public hiding (map)
+open import Relation.Binary.PropositionalEquality.Core -- public
+open import Relation.Binary.PropositionalEquality hiding (setoid ; preorder ; decSetoid; [_]) -- public
+open import Data.Sum hiding (map) -- public
 
 -- infix 3 _goesThru_
 
@@ -55,7 +52,7 @@ IOResponse = ConsoleResponse
 
 -- was Σ[ s ∈ GUIStateˢ compStrucEx frame ] (GUIel compStrucEx c) × (FrameGUIObj {∞} s )
 
--- 
+-- --@BEGIN@MethodStarted
 
 -- data MethodStarted (s : GUIStateˢ compStrucEx c)
 --                    (obj : FrameGUIObj {∞} s) : Set where
@@ -63,20 +60,25 @@ IOResponse = ConsoleResponse
 --    started :    (m    : GUIMethodˢ compStrucEx frame s) (pr : IO consoleI ∞ StateAndGuiObj)
 --                 → MethodStarted s obj
 
--- 
+-- --@END
 
+--@BEGIN@MethodStarted
 data MethodStarted (g : GUI) : Set where
    notStarted : MethodStarted g
    started :   (m    : GUIMethod g)
                (pr : IO consoleI ∞ GUI)
                → MethodStarted g
+--@END
 
+--@BEGIN@ModelGuiState
 data GuiState : Set where
    state : (g       : GUI)
            (m       : MethodStarted g) → GuiState
+--@END
 
 
 
+--@BEGIN@modelGuiCommand
 GuiCmd : (s : GuiState) → Set
 GuiCmd  (state g notStarted)
        = GUIMethod g
@@ -84,9 +86,12 @@ GuiCmd  (state g (started m (exec' c f)))
        = IOResponse c
 GuiCmd  (state g (started m (return' a)))
        = ⊤
+--@END
 
 -- modelGuiResponse : Set
+--@BEGIN@modelGuiResponse
 -- modelGuiResponse = ⊤
+--@END
 
 
 
@@ -136,7 +141,9 @@ guiNextaux g m  (return' (guic sNew  objNew)) n =
 
 
 
+--@BEGIN@modelGuiNext
 guiNext : (g : GuiState) → GuiCmd g →  GuiState
+--@END
 guiNext (state g notStarted) m     =
        guiNextaux g m  (guiNextProgramStarted g m) skippedIOcmds
 guiNext (state g (started m (exec' c' f))) c =
@@ -146,6 +153,7 @@ guiNext (state g (started m (return' (guic sNew  objNew)))) c =
 
 mutual
 --\GUIModel
+--@BEGIN@ModelGuiCommands
    data GuiCmds : GuiState → Set where
      nilCmd : {g : GuiState} →  GuiCmds g
      _>>>_ :  {g : GuiState} (l : GuiCmds g)
@@ -158,22 +166,27 @@ mutual
               → GuiCmds g
 
    guiNexts : (g : GuiState) → GuiCmds g → GuiState
+--@END
    guiNexts g nilCmd = g
    guiNexts g (l >>> c') = guiNext (guiNexts g l) c'
    guiNexts g (l >>>' c' wproof g' ,,, p) = g'
 
+--@BEGIN@arrowGui
 data _-gui->_ (s : GuiState) :
               (s' : GuiState ) → Set where
  refl-gui-> :  s -gui-> s
  step       :  {s' : GuiState}(c : GuiCmd s)
                (next : guiNext s c -gui-> s')
                → s -gui-> s'
+--@END
 
 
+--@BEGIN@arrowGuiOne
 data _-gui->¹_ (s : GuiState )
                : (s' : GuiState)→ Set where
    step :  (c : GuiCmd s)
            → s -gui->¹ guiNext s c
+--@END
 
 
 
@@ -218,6 +231,7 @@ nextGui' m c = guiNext' m c
 --
 -- This is from GUIModelAdvancedsimplified in old code:
 --
+--@BEGIN@GoesThruState
 
 _goesThru_ :  {s s' : GuiState}
               (q : s -gui-> s')
@@ -225,6 +239,8 @@ _goesThru_ :  {s s' : GuiState}
 _goesThru_ {s} (step c q) t   =  s ≡ t ⊎ q goesThru t
 _goesThru_ {s} refl-gui-> t   =  s ≡ t
 
+--@END
+--@BEGIN@GoesThruSelf
 
 
 -- _goesThru_ {s} (execᵢ c f) t = s ≡ t ⊎ (f _) goesThru t
@@ -234,6 +250,7 @@ _goesThru_ {s} refl-gui-> t   =  s ≡ t
 goesThruSelf : {s s' : GuiState} (q : s -gui-> s')
                → q goesThru s
 
+--@END
 goesThruSelf (step c next) = inj₁ refl
 goesThruSelf refl-gui->    = refl
 
@@ -241,6 +258,7 @@ goesThruSelf refl-gui->    = refl
 -- goesThruSelf (returnᵢ a) = refl
 
 --\GUIModel
+--@BEGIN@guiEventuallyState
 data  _-eventually->_ :
       (start final : GuiState) → Set where
   hasReached  :  {s : GuiState} → s -eventually-> s
@@ -248,6 +266,7 @@ data  _-eventually->_ :
           (fornext :  (m :  GuiCmd start)
                       →  (guiNext start m) -eventually-> final)
           → start -eventually-> final
+--@END
 
 -- We define short forms for inputs used in the model
 --    used as GuiCmd

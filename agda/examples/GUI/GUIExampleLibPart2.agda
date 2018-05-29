@@ -1,3 +1,4 @@
+--@PREFIX@GUIExampleLibPartTwo
 module GUI.GUIExampleLibPart2 where
 
 open import Size

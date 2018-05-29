@@ -22,15 +22,12 @@ open import SizedIO.Base using (IOInterface; Command; Response; IO; return)
 open import SizedIO.Console using (consoleI; translateIOConsole)
 open import StateSizedIO.GUI.BaseStateDependent
 open import heap.libraryVec
+open import heap.libraryBool
 open import GUI.GUIDefinitionsBase
 
 
 
 
-
-bool2Nat : Bool → ℕ
-bool2Nat true = 1
-bool2Nat false = 0
 
 guiEl2NrButtons : (cmpStruc : CompStruc)
                 (c : Components cmpStruc)
