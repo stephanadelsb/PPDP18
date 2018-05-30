@@ -2,9 +2,9 @@
 
 # Declarative GUIs: Simple, Consistent, and Verified
 
-## Files Used in the article submitted to PPDP18 by Stephan Adelsberger, Anton Setzer, and Eric Walkingshaw
+Files Used in the article submitted to PPDP18 by Stephan Adelsberger, Anton Setzer, and Eric Walkingshaw
 
-## Code in Agda
+##### Code in Agda
 0. All Agda Code
   [agda](/agda/)
 1. Start file loading all files of the paper by chapter:
@@ -13,3 +13,10 @@
   [html](/html/)
 3. The above files can be viewed with a *Browser* via the following link:
    [GUI.LoadAllPPDP18.html](http://www.cs.swan.ac.uk/~csetzer/transfer/ppdp18Temporary8jqm7tRs/GUI.LoadAllPPDP18.html)
+   
+##### Install instructions
+Please refer to the file 'README_INSTALL.txt'.
+
+##### Screencast
+![screencast](http://www.cs.swan.ac.uk/~csetzer/transfer/ppdp18Temporary8jqm7tRs/GUIscreencast.gif) 
+
